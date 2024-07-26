@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import SplashScreen from "../app/Screens/SplashScreen/SplashScreen";
 import SignUpDetailsScreen from "../app/Screens/SignUpDetailsScreen/SignUpDetailsScreen";
@@ -53,8 +53,9 @@ import SettingsScreen from "../app/Screens/ProfileScreen/SettingsScreen";
 import Map from "../app/Screens/Map";
 import explore from "../app/Screens/ExploreScreen/ExploreScreen";
 import explore2 from "../app/Screens/ExploreScreen/Explore2";
-import AvailableFilght from "../app/Screens/AvailableFLight/AvailableFlight1";
-import Flightdetails from "../app/Screens/Flightdetails/Flightdetails1.js";
+//import PayStackTest from "./../app/Screens/PayStackTest";
+import AvailableFlight from "../app/Screens/AvailableFlight/AvailableFlight1";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -63,10 +64,17 @@ const MainStackNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
-        <Stack.Screen name="Map" component={Map} />
+        <Stack.Screen name="EmailVerification" component={EmailVerificationScreen} />
+        {/* <Stack.Screen name="PaySack" component={PayStackTest} /> */}
+        <Stack.Screen name="SeatSelection" component={SeatSelection} />
+        <Stack.Screen name="PhoneNumberVerification" component={PhoneNumberVerificationScreen} />
+        <Stack.Screen name="AvailableFlight" component={AvailableFlight} />
         <Stack.Screen name="SignUpDetails" component={SignUpDetailsScreen} />
+        <Stack.Screen name="PassengersDetails" component={PassengersDetails} />
+        <Stack.Screen name="Map" component={Map} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="CompletionScreen" component={CompletionScreen} />
+        <Stack.Screen name="PopularDestination" component={PopularDestination} />
         <Stack.Screen name="BottomTab" component={BottomTabNavigator} />
         <Stack.Screen name="NextWelcome" component={NextWelcomeScreen} />
         <Stack.Screen name="MyTripScreen" component={MyTripScreen} />
@@ -82,8 +90,6 @@ const MainStackNavigator = () => {
         <Stack.Screen name="MultiCity" component={MultiCity} />
         <Stack.Screen name="Home" component={RoundTrip} />
         <Stack.Screen name="TripDetails" component={TripDetails} />
-        <Stack.Screen name="PassengersDetails" component={PassengersDetails} />
-        <Stack.Screen name="SeatSelection" component={SeatSelection} />
         <Stack.Screen name="EditDetails" component={EditDetails} />
         <Stack.Screen name="ChangePassword" component={ChangePassword} />
         <Stack.Screen name="DeleteAccount" component={DeleteAccount} />
@@ -94,11 +100,8 @@ const MainStackNavigator = () => {
         <Stack.Screen name="LogIn" component={LogInScreen} />
         <Stack.Screen name="ForgotPasswordPhone" component={ForgotPasswordPhone}/>
         <Stack.Screen name="Notification" component={Notification} />
-        <Stack.Screen name="PhoneNumberVerification" component={PhoneNumberVerificationScreen} />
         <Stack.Screen name="PhoneNumberVerificationForgotPassword" component={PhoneNumberVerificationScreenForgotPassword} />
-        <Stack.Screen name="EmailVerification" component={EmailVerificationScreen} />
         <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
-        <Stack.Screen name="PopularDestination" component={PopularDestination} />
         <Stack.Screen name="ToDo" component={ToDoScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="CountryLanguageSearch" component={CountryLanguageSearch} />
@@ -111,8 +114,6 @@ const MainStackNavigator = () => {
         <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
         <Stack.Screen name="explore" component={explore} />
         <Stack.Screen name="explore2" component={explore2} />
-        <Stack.Screen name="AvailableFlight" component={AvailableFilght} />
-        <Stack.Screen name="Flightdetails" component={Flightdetails} />
         {/* <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} /> */}
       </Stack.Navigator>
     </NavigationContainer>

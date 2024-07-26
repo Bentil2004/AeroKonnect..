@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-const HomeScreen = ({ navigation }) => {
+const AvailableFlight = ({ navigation }) => {
   const [selectedDate, setSelectedDate] = useState('29th May');
 
   const dates = ['29th May', '29th May', '29th May', '29th May', '29th May', '29th May', '29th May'];
@@ -40,7 +40,7 @@ const HomeScreen = ({ navigation }) => {
 
   const filteredFlights = flights.filter(flight => flight.date === selectedDate);
 const detail = function(){
-navigation.navigate('details', { flights });
+navigation.navigate('PassengersDetails', { flights });
 }
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -48,12 +48,9 @@ navigation.navigate('details', { flights });
       <View style={styles.container}>
 
       <View style={styles.top}>
- <TouchableOpacity onPress={''}>
-  <Image
-style={styles.topback}
- source={require('./../Assets/Baackward.png')}
-   />
-   </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Oneway')}>
+          <Text style={styles.backButton}>←</Text>
+        </TouchableOpacity>
 <Text style={styles.book}>
  Available Flights
 </Text>
@@ -92,9 +89,9 @@ style={styles.topback}
               <View style={styles.flightRoute}>
                 <Text style={styles.flightRouteText}>{flight.route}</Text>
                 <View style = {styles.three}>
-                <Image style={styles.line} source={require('./../Assets/line.png')}/>
-                <Image style={styles.flight} source={require('./../Assets/plane.png')}/>
-                <Image  style={styles.line} source={require('./../Assets/line.png')}/>
+                <Image style={styles.line} source={require('../../assets/line.png')}/>
+                <Image style={styles.flight} source={require('../../assets/plane.png')}/>
+                <Image  style={styles.line} source={require('../../assets/line.png')}/>
                 </View>
                 <Text style={styles.flightRouteText2}>{flight.route2}</Text>
 
@@ -148,6 +145,11 @@ borderWidth:0,
 backgroundColor:'white',
 height:60,
 width:'105%',
+},
+backButton: {
+  left: 10,
+  fontSize: 29,
+  color: 'black',
 },
   flight:{
 top:-11,
@@ -248,4 +250,4 @@ top:-11,
   },
 });
 
-export default HomeScreen;
+export default AvailableFlight;
