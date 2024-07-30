@@ -1,11 +1,19 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
+
+const images = [
+  require("../../assets/Airplanemodel.jpg"),
+  require("../../assets/images/CTEdit.png"),
+  require("../../assets/AirlineBG.png"), 
+];
 
 const NextWelcomeScreen = () => {
   const navigation = useNavigation();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const flatListRef = useRef(null);
 
   const onSkipPressed = () => {
     navigation.navigate('SignIn');
@@ -15,14 +23,27 @@ const NextWelcomeScreen = () => {
     navigation.navigate('BottomTab');
   };
 
+  const handleScroll = (event) => {
+    const index = Math.floor(event.nativeEvent.contentOffset.x / width);
+    setCurrentIndex(index);
+  };
+
+  const renderItem = ({ item }) => (
+    <Image source={item} style={styles.image} resizeMode="cover" />
+  );
+
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../../assets/Airplanemodel.jpg")}
-        style={styles.AirplaneBG}
-        resizeMode="cover"
+      <FlatList
+        data={images}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        horizontal
+        pagingEnabled
+        onScroll={handleScroll}
+        showsHorizontalScrollIndicator={false}
+        ref={flatListRef}
       />
-
       <View style={styles.upperTextContainer}>
         <Text style={styles.upperText}>
           AEROKONNECT{"\n"}
@@ -45,20 +66,45 @@ const NextWelcomeScreen = () => {
           <Text style={styles.buttonText}>Go To Home</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={styles.indicatorContainer}>
+        {images.map((_, index) => (
+          <View
+            key={index}
+            style={[
+              styles.indicator,
+              { backgroundColor: index === currentIndex ? '#00527E' : '#C0C0C0' }
+            ]}
+          />
+        ))}
+      </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  AirplaneBG: {
-    ...StyleSheet.absoluteFillObject,
-    width: '100%',
-    height: '100%',
-    resizeMode: "cover"
+  container: {
+    flex: 1,
+    backgroundColor: "#ffff",
   },
-  bottomText: {
-    textAlign: 'center',
+  image: {
+    width,
+    height: '100%',
+  },
+  upperTextContainer: {
+    position: 'absolute',
+    top: 50,
+    left: '10%',
+    width: '80%',
+    borderRadius: 5,
+  },
+  upperText: {
+    fontSize: 24,
+    fontWeight: '500',
     color: '#00527E',
+    textAlign: 'center',
+  },
+  slogan: {
     fontSize: 16,
   },
   bottomTextContainer: {
@@ -68,9 +114,10 @@ const styles = StyleSheet.create({
     width: '80%',
     borderRadius: 5,
   },
-  container: {
-    flex: 1,
-    backgroundColor: "#ffff",
+  bottomText: {
+    textAlign: 'center',
+    color: '#00527E',
+    fontSize: 16,
   },
   buttonContainer: {
     position: 'absolute',
@@ -91,20 +138,18 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
-  slogan: {
-    alignContent: 'center',
-    fontSize: 16,
+  indicatorContainer: {
+    position: 'absolute',
+    bottom: 30,
+    alignSelf: 'center',
+    flexDirection: 'row',
   },
-  upperText: {
-    fontSize: 24,
-    fontWeight: '500',
-    color: '#00527E',
-    textAlign: 'center',
-    marginTop: 100,
-    alignContent: 'center',
-  }
+  indicator: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    margin: 5,
+  },
 });
 
 export default NextWelcomeScreen;
-
-
