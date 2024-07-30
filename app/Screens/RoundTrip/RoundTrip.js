@@ -169,9 +169,9 @@ const styles = StyleSheet.create({
   },
   swapButton: {
     position: 'absolute',
-    top: 45,
+    top: 40,
     zIndex: 1,
-    backgroundColor: 'white',
+    //backgroundColor: 'white',
     padding: 5,
     borderRadius: 15,
   },

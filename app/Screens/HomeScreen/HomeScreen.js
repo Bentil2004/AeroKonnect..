@@ -47,7 +47,7 @@ const HomeScreen = () => {
     latitude: 37.78825,
     longitude: -122.4324,
   });
-  const [search, setSearch] = useState("Tokyo");
+  const [search, setSearch] = useState("Miami");
   const [placeDetails, setPlaceDetails] = useState([]);
 
   const handleSearch = async () => {
@@ -235,6 +235,28 @@ const HomeScreen = () => {
             renderItem={renderItem}
             contentContainerStyle={styles.flatListContainer}
           />
+          <Text style={styles.sectionTitle}>Trip Inscription</Text>
+          <Text style={styles.writing}>
+            Experience the world through new cultures and breathtaking landscapes.
+          </Text>
+          <FlatList
+            data={placeDetails}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            renderItem={renderItem}
+            contentContainerStyle={styles.flatListContainer}
+          />
+          <Text style={styles.sectionTitle}>Trip Inscription</Text>
+          <Text style={styles.writing}>
+            Experience the world through new cultures and breathtaking landscapes.
+          </Text>
+          <FlatList
+            data={placeDetails}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            renderItem={renderItem}
+            contentContainerStyle={styles.flatListContainer}
+          />
 
           <Text style={styles.sectionTitle}>Recreational Sites Around the World</Text>
           <FlatList
@@ -259,7 +281,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "red",
+    backgroundColor: "white",
   },
   scrollContainer: {
     paddingBottom: 20,
@@ -269,6 +291,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 16,
+    
   },
   Text: {
     fontSize: 20,

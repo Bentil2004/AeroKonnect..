@@ -9,7 +9,7 @@ import {
   StatusBar,
   TouchableOpacity,
   RefreshControl,
-  Platform
+  Animated,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -27,7 +27,7 @@ const Explore = () => {
       const response = await fetch(placesUrl);
       const result = await response.json();
       if (result.results && result.results.length > 0) {
-        const randomPlaces = result.results.sort(() => 0.5 - Math.random()).slice(0, 5);
+        const randomPlaces = result.results.sort(() => 0.5 - Math.random()).slice(0, 9);
         const placeDetailsPromises = randomPlaces.map(async (place) => {
           const photoUrl = place.photos
             ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=AIzaSyCLkvlVymR7LU-xm61NjaWDFHtUjT9f5cs`
@@ -65,22 +65,20 @@ const Explore = () => {
 
   return (
     <View style={styles.explore}>
-      <StatusBar style="auto" />
+      {/* <StatusBar style="auto" /> */}
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <View style={styles.frameParent}>
-          <View>
-            <View style={styles.frameGroup}>
-              <View style={styles.theWorldAwaitsParent}>
-                <Text style={[styles.theWorldAwaits, styles.theWorldAwaitsTypo]}>
-                  The World Awaits
-                </Text>
-                <Text style={[styles.uncoverYourNext, styles.yourTypo]}>
-                  Uncover Your Next Escape with AeroKonnect
-                </Text>
-              </View>
+          <View style={styles.frameGroup}>
+            <View style={styles.theWorldAwaitsParent}>
+              <Text style={[styles.theWorldAwaits, styles.theWorldAwaitsTypo]}>
+                The World Awaits
+              </Text>
+              <Text style={[styles.uncoverYourNext, styles.yourTypo]}>
+                Uncover Your Next Escape with AeroKonnect
+              </Text>
             </View>
           </View>
           <View style={styles.exploreDifferentPartsOfTheParent}>
@@ -111,8 +109,15 @@ const Explore = () => {
                 Find your preferred destinations on the map and book your next flight
               </Text>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate("Map")}>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate("Map")} 
+              style={styles.mapButton} 
+              activeOpacity={0.7}
+            >
               <Image style={styles.frameChild} resizeMode="cover" source={require("../../assets/Globe.png")} />
+              <View style={styles.overlay}>
+                <Text style={styles.overlayText}>Tap to Explore</Text>
+              </View>
             </TouchableOpacity>
           </View>
         </View>
@@ -156,6 +161,7 @@ const styles = StyleSheet.create({
     height: 128,
     justifyContent: "flex-end",
     overflow: "hidden",
+    borderRadius: 15,
   },
   imageGroup: {
     marginLeft: 10,
@@ -179,7 +185,28 @@ const styles = StyleSheet.create({
     width: "90%",
     borderRadius: 28,
   },
+  mapButton: {
+    position: "relative",
+    borderRadius: 28,
+    overflow: "hidden",
+    marginTop: 12,
+  },
+  overlay: {
+    position: "absolute",
+    top: 11,
+    bottom: 0,
+    left: 0,
+    right: 38,
+    borderRadius:35,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  overlayText: {
+    color: "#d7d7d7",
+    fontSize: 22,
+    fontWeight: "bold",
+  },
 });
 
 export default Explore;
-

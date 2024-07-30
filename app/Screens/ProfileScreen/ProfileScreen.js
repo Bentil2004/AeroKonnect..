@@ -9,17 +9,17 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate('PaymentMethods');
   };
 
-  const onMyAccountPressed = () => {
-    if (isLoggedIn) {
-      navigation.navigate('MyAccountUser'); 
-    } else {
-      navigation.navigate('MyAccounts'); 
-    }
-  };
+  // const onMyAccountPressed = () => {
+  //   if (isLoggedIn) {
+  //     navigation.navigate('MyAccountUser'); 
+  //   } else {
+  //     navigation.navigate('MyAccounts'); 
+  //   }
+  // };
 
-  /*const onMyAccountUserPressed = () => {
+  const onMyAccountUserPressed = () => {
     navigation.navigate('MyAccountUser'); 
-  };*/
+  };
 
 
   const onSettingsPressed = () => {
@@ -38,7 +38,7 @@ const ProfileScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>PROFILE</Text>
 
-      <TouchableOpacity style={styles.button} onPress={onMyAccountPressed} /*onPress={onMyAccountUserPressed}*/ >
+      <TouchableOpacity style={styles.button} /*onPress={onMyAccountPressed}*/ onPress={onMyAccountUserPressed} >
         <Icon name="user" size={20} color="#00527e" />
         <Text style={styles.buttonText}>My Account</Text>
         <Icon name="chevron-right" size={20} color="#00527e" />
