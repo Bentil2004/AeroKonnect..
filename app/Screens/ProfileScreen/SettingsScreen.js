@@ -5,7 +5,7 @@ const SettingsScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.backButton} onPress={() => navigation.navigate('Profile')}>←</Text>
+        <Text style={styles.backButton} onPress={() => navigation.navigate('BottomTab')}>←</Text>
         <Text style={styles.headerText}>Settings</Text>
       </View>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CountryLanguageSearch')}>

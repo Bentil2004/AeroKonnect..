@@ -1,16 +1,25 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, ScrollView, useWindowDimensions, Alert } from "react-native";
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
-import * as AuthSession from 'expo-auth-session';
-import * as AppleAuthentication from 'expo-apple-authentication';
-import { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  useWindowDimensions,
+  Alert,
+} from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { createClient } from "@supabase/supabase-js";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import HorizontalLine from "../../components/HorizontalLine/OrDivider";
 import CustomImageButton from "../../components/CustomImageButton";
+import * as Google from "expo-auth-session/providers/google";
+import { Facebook } from "expo-auth-session";
 
-const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID';
+const supabaseUrl = "https://ucusngylouypldsoltnd.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdXNuZ3lsb3V5cGxkc29sdG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcyNjgxMDksImV4cCI6MjAzMjg0NDEwOX0.cQlMeHLv1Dd6gksfz0lO6Sd3asYfgXZrkRuCxIMnwqw";  
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const SignUpScreen = () => {
   const [Email, setEmail] = useState("");
@@ -24,6 +33,17 @@ const SignUpScreen = () => {
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
+
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: "173130817331-2ok5cdjopc9muhkbsvsg32svh7jqhj4b.apps.googleusercontent.com",
+  });
+
+  React.useEffect(() => {
+    if (response?.type === "success") {
+      const { id_token } = response.params;
+      signInWithGoogle(id_token);
+    }
+  }, [response]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -69,99 +89,90 @@ const SignUpScreen = () => {
     return valid;
   };
 
-  const onSignUpDetailsPressed = () => {
+  const signUpWithEmail = async (email, password) => {
+    const { user, session, error } = await supabase.auth
+      .signUp({ email, password })
+      .then((res) => {
+        if (res.data.user) {
+          console.log("User signed up:", res);
+          navigation.navigate("SignUpDetails", {
+            userId: res.data.user.id,
+          });
+        } else {
+          console.log("User sign up failed:", res);
+          Alert.alert("Error", "Failed to sign up");
+        }
+      })
+      .catch((error) => {
+        console.error("Sign up error:", error);
+        Alert.alert("Error", "Failed to sign up");
+      });
+  };
+
+  const onSignUpDetailsPressed = (email, password) => {
     if (validateForm()) {
-      navigation.navigate('SignUpDetails');
+      signUpWithEmail(email, password);
     }
   };
 
-  const onTermsandConditionsPressed = () => {
-    navigation.navigate('TermsAndConditions');
-  };
-
-  const LogInPressed = () => {
-    navigation.navigate('LogIn');
-  };
-
-  const onSignInApple = async () => {
+  const signInWithGoogle = async (idToken) => {
     try {
-      const credential = await AppleAuthentication.signInAsync({
-        requestedScopes: [AppleAuthentication.AppleAuthenticationScope.FULL_NAME, AppleAuthentication.AppleAuthenticationScope.EMAIL],
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        idToken: idToken
       });
-      console.log('Apple login success:', credential);
-    } catch (error) {
-      console.error('Apple login error:', error);
-      Alert.alert('Error', 'Failed to sign in with Apple');
-    }
-  };
-
-  const onSignInGoogle = async () => {
-    try {
-      const redirectUrl = AuthSession.getRedirectUrl();
-      const result = await AuthSession.startAsync({
-        authUrl:
-          `https://accounts.google.com/o/oauth2/v2/auth?response_type=code` +
-          `&client_id=${GOOGLE_CLIENT_ID}` +
-          `&redirect_uri=${encodeURIComponent(redirectUrl)}` +
-          `&scope=openid%20profile%20email`,
-      });
-
-      if (result.type === 'success') {
-        console.log('Google login success:', result.params);
-      } else if (result.type === 'cancel') {
-        console.log('Google login canceled');
+  
+      if (error) {
+        console.error("Google login error:", error.message);
+        Alert.alert("Error", "Failed to sign in with Google");
+      } else {
+        console.log("User logged in with Google:", data.user);
       }
     } catch (error) {
-      console.error('Google login error:', error);
-      Alert.alert('Error', 'Failed to sign in with Google');
+      console.error("Google login error:", error.message);
+      Alert.alert("Error", "Failed to sign in with Google");
     }
   };
 
+
+
+  
   const onSignInFacebook = async () => {
     try {
-      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+      const { type, params } = await Facebook.logInWithReadPermissionsAsync({
+        appId: 1484906945549333,
+        permissions: ['public_profile', 'email'],
+      });
 
-      if (result.isCancelled) {
-        console.log('Facebook login canceled');
-      } else {
-        const data = await AccessToken.getCurrentAccessToken();
+      if (type === 'success') {
+        const { token } = params;
+        const { data, error } = await supabase.auth.signInWithOAuth({
+          provider: 'facebook',
+          accessToken: token,
+        });
 
-        if (!data) {
-          throw new Error('Something went wrong obtaining access token');
+        if (error) {
+          console.error("Facebook login error:", error.message);
+          Alert.alert("Error", "Failed to sign in with Facebook");
+        } else {
+          console.log("User logged in with Facebook:", data.user);
         }
-
-        const accessToken = data.accessToken.toString();
-        const responseInfoCallback = (error, result) => {
-          if (error) {
-            console.log(error);
-            Alert.alert('Error', 'Failed to fetch user info');
-          } else {
-            console.log('Facebook login success:', result);
-          }
-        };
-
-        const infoRequest = new GraphRequest('/me', {
-          accessToken: accessToken,
-          parameters: {
-            fields: {
-              string: 'id, name, email',
-            },
-          },
-        }, responseInfoCallback);
-
-        new GraphRequestManager().addRequest(infoRequest).start();
+      } else {
+        console.log('Facebook login cancelled');
       }
     } catch (error) {
-      console.error('Facebook login error:', error);
-      Alert.alert('Error', 'Failed to sign in with Facebook');
+      console.error("Facebook login error:", error.message);
+      Alert.alert("Error", "Failed to sign in with Facebook");
     }
   };
+  
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.root}>
         <Text style={styles.title}>
-          <Text style={styles.UpText}> Travel Around The World With Ease</Text>{"\n"}
+          <Text style={styles.UpText}>Travel Around The World With Ease</Text>
+          {"\n"}
           Sign Up with AeroKonnect Today!
         </Text>
 
@@ -169,8 +180,9 @@ const SignUpScreen = () => {
           <CustomInput
             placeholder="Email"
             value={Email}
+            onChangeText={setEmail}
             setValue={setEmail}
-            bordercolor={passwordError ? "red" : "#7D7D7D"}
+            bordercolor={emailError ? "red" : "#7D7D7D"}
             borderRadius={15}
             iconName={"mail"}
           />
@@ -181,6 +193,7 @@ const SignUpScreen = () => {
           <CustomInput
             placeholder="Enter Password"
             value={Password}
+            onChangeText={setPassword}
             setValue={setPassword}
             secureTextEntry={!showPassword}
             bordercolor={passwordError ? "red" : "#7D7D7D"}
@@ -201,9 +214,10 @@ const SignUpScreen = () => {
           <CustomInput
             placeholder="Confirm Password"
             value={PasswordRepeat}
+            onChangeText={setPasswordRepeat}
             setValue={setPasswordRepeat}
             secureTextEntry={!showPasswordRepeat}
-            bordercolor={passwordError? "red" : "#7D7D7D"}
+            bordercolor={passwordRepeatError ? "red" : "#7D7D7D"}
             borderRadius={15}
             iconName={"lock-closed"}
           />
@@ -219,25 +233,19 @@ const SignUpScreen = () => {
 
         <CustomButton
           text="Next"
-          onPress={onSignUpDetailsPressed}
+          onPress={() => onSignUpDetailsPressed(Email, Password)}
           bg={"#00527e"}
           txt={"white"}
         />
       </View>
 
-      <HorizontalLine/>
+      <HorizontalLine />
 
-      <View style={[styles.buttonRow, isLandscape && styles.buttonRowLandscape]}>
+      <View
+        style={[styles.buttonRow, isLandscape && styles.buttonRowLandscape]}
+      >
         <CustomImageButton
-          onPress={onSignInApple}
-          imageSource={require("../../assets/CustomLogoImages/Apple.png")}
-          bgColor={"#E4EAF1"}
-          txtColor={"black"}
-          style={styles.imageButton}
-        />
-
-        <CustomImageButton
-          onPress={onSignInGoogle}
+          onPress={() => promptAsync()}  // Trigger Google sign-in
           imageSource={require("../../assets/CustomLogoImages/Google.png")}
           bgColor={"#E4EAF1"}
           style={styles.imageButton}
@@ -253,15 +261,23 @@ const SignUpScreen = () => {
 
       <Text style={styles.text}>
         Already have an account?{"\n"}
-        <Text style={styles.Link} onPress={LogInPressed}>
+        <Text style={styles.Link} onPress={() => navigation.navigate("LogIn")}>
           Log in
         </Text>
       </Text>
 
-      <View style={[styles.bottomTextContainer, isLandscape && styles.bottomTextContainerLandscape]}>
+      <View
+        style={[
+          styles.bottomTextContainer,
+          isLandscape && styles.bottomTextContainerLandscape,
+        ]}
+      >
         <Text style={styles.bottomText}>
           By clicking on the next button you agree to the{"\n"}
-          <Text style={styles.Link} onPress={onTermsandConditionsPressed}>
+          <Text
+            style={styles.Link}
+            onPress={() => navigation.navigate("TermsAndConditions")}
+          >
             Terms and Conditions.
           </Text>
         </Text>
@@ -282,9 +298,10 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    //justifyContent: 'space-between',
     marginVertical: 20,
+    alignSelf: "center",
   },
   buttonRowLandscape: {
     marginVertical: 10,
@@ -295,7 +312,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 3,
     borderRadius: 6,
     gap: 0.8,
-    padding:10,
+    padding: 10,
     opacity: 1,
   },
   Link: {
@@ -327,33 +344,33 @@ const styles = StyleSheet.create({
   },
   UpText: {
     fontSize: 20,
-    fontWeight: '500',
-    color: '#00527E',
-    textAlign: 'center',
+    fontWeight: "500",
+    color: "#00527E",
+    textAlign: "center",
     marginTop: 100,
-    alignContent: 'center',
+    alignContent: "center",
   },
   passwordInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
     marginBottom: 20,
   },
   eyeIcon: {
     marginLeft: -35,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: -20,
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
   },
   errorText: {
-    color: 'red',
+    color: "red",
     marginTop: -30,
     fontSize: 12,
-    marginBottom: 5
+    marginBottom: 5,
   },
 });
 

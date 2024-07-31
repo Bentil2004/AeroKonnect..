@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, Button, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, Button, ScrollView, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { useNavigation } from "@react-navigation/native";
 
 const Map = () => {
   const [location, setLocation] = useState({
@@ -58,9 +59,14 @@ const Map = () => {
             : null;
 
           return {
+            id: place.place_id, 
             name: place.name,
             address: place.vicinity,
             photoUrl,
+            description: place.types.join(', '), 
+            price: (Math.random() * 1000).toFixed(2), 
+            images: [photoUrl, photoUrl, photoUrl], 
+            todo: [{ title: "Activity 1", description: "Description 1", image: photoUrl }],
           };
         });
 
@@ -74,6 +80,16 @@ const Map = () => {
       console.error(error);
       return [];
     }
+  };
+
+  const navigation = useNavigation();
+
+  const handlePlacePress = (place) => {
+    navigation.navigate('PopularDestination', { destination: place });
+  };
+
+  const handleBack = () => {
+    navigation.goBack();
   };
 
   return (
@@ -94,6 +110,11 @@ const Map = () => {
             description={'Marker Description'}
           />
         </MapView>
+
+        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+        <Text style={styles.Buttonback} onPress={() => navigation.navigate('BottomTab')}>←</Text>
+        </TouchableOpacity>
+
         <View style={styles.searchBar}>
           <TextInput
             placeholder="Search here"
@@ -103,18 +124,21 @@ const Map = () => {
           />
           <Button title="Search" onPress={handleSearch} />
         </View>
+
         {placeDetails.length > 0 && (
           <ScrollView horizontal style={styles.placeDetails} showsHorizontalScrollIndicator={false}>
             {placeDetails.map((place, index) => (
-              <View key={index} style={styles.placeContainer}>
-                <Text style={styles.placeName}>{place.name}</Text>
-                <Text style={styles.placeAddress}>{place.address}</Text>
-                {place.photoUrl ? (
-                  <Image source={{ uri: place.photoUrl }} style={styles.placeImage} />
-                ) : (
-                  <Text>No Image Available</Text>
-                )}
-              </View>
+              <TouchableOpacity key={index} onPress={() => handlePlacePress(place)}>
+                <View style={styles.placeContainer}>
+                  <Text style={styles.placeName}>{place.name}</Text>
+                  <Text style={styles.placeAddress}>{place.address}</Text>
+                  {place.photoUrl ? (
+                    <Image source={{ uri: place.photoUrl }} style={styles.placeImage} />
+                  ) : (
+                    <Text>No Image Available</Text>
+                  )}
+                </View>
+              </TouchableOpacity>
             ))}
           </ScrollView>
         )}
@@ -131,13 +155,24 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    fontWeight: 'bold',
+    zIndex: 1,
+  },
+  Buttonback: {
+    fontSize: 26,
+    fontWeight: 'bold',
+  },
   searchBar: {
     position: 'absolute',
-    top: 10,
-    left: 10,
+    top: 40,
+    left: 50,
     right: 10,
-    backgroundColor: 'white',
-    borderRadius: 5,
+    backgroundColor: '#E4EAF1',
+    borderRadius: 10,
     padding: 5,
     flexDirection: 'row',
     alignItems: 'center',
@@ -162,7 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 5,
-    elevation: 2, 
+    elevation: 2,
   },
   placeName: {
     fontSize: 18,
@@ -176,7 +211,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 150,
     marginTop: 10,
-    borderRadius:'10',
+    borderRadius: 5,
   },
 });
 

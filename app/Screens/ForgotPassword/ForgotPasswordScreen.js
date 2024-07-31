@@ -28,12 +28,12 @@ const ForgotPasswordScreen = () => {
             <Text style={styles.optionButtonText}>Reset via Email</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.optionButton} onPress={handlePhonePress}>
+        {/* <TouchableOpacity style={styles.optionButton} onPress={handlePhonePress}>
           <View style={styles.optionButtonContent}>
             <Icon name="phone" size={24} color="#00527e" style={styles.icon} />
             <Text style={styles.optionButtonText}>Reset via Phone</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     justifyContent: 'flex-start',
     alignItems: 'center',
+    
   },
   backButton: {
     position: 'absolute',

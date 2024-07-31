@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-elements';
-import { useState } from 'react';
 
-const RoundTrip = function ({ navigation }) {
+const RoundTrip = ({ navigation }) => {
   const [input1, setInput1] = useState('');
   const [input2, setInput2] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const swapContent = () => {
     const temp = input1;
@@ -14,24 +14,41 @@ const RoundTrip = function ({ navigation }) {
     setInput2(temp);
   };
 
-  const oneway = function () {
+  const oneway = () => {
     navigation.navigate('Oneway');
   };
-  const Multicity = function () {
+
+  const Multicity = () => {
     navigation.navigate('MultiCity');
+  };
+
+  const searchFlights = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('https://sky-scanner3.p.rapidapi.com/flights/search-one-way?fromEntityId=PARI&cabinClass=economy', {
+        method: 'GET',
+        headers: {
+          'x-rapidapi-key': '8d96448f6cmsh6976762dedf920ap10a7afjsn1d21cf7179c8',
+          'x-rapidapi-host': 'sky-scanner3.p.rapidapi.com',
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+      navigation.navigate('AvailableFlight', { flights: data });
+    } catch (error) {
+      console.error('Error fetching flights:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-
       <View style={styles.top}>
-        <TouchableOpacity>
-          <Image style={styles.topback} source={require('../../assets/Baackward.png')} />
-        </TouchableOpacity>
+        <Text style={styles.backButton} onPress={() => navigation.navigate('BottomTab')}>←</Text>
         <Text style={styles.book}>Book your flight</Text>
       </View>
-
       <View style={styles.mainbut}>
         <Button
           buttonStyle={{ backgroundColor: '#E4EAF1', padding: 5 }}
@@ -41,7 +58,7 @@ const RoundTrip = function ({ navigation }) {
         />
         <Button
           buttonStyle={{ backgroundColor: '#00527E', borderRadius: 8, padding: 5, width: 111 }}
-          onPress={RoundTrip}
+          onPress={() => navigation.navigate('RoundTrip')}
           titleStyle={{ bottom: 1 }}
           title='Round-Trip'
         />
@@ -52,13 +69,12 @@ const RoundTrip = function ({ navigation }) {
           title='Multi-City'
         />
       </View>
-
       <View style={styles.container2}>
         <TextInput
           style={styles.textinputA}
           placeholder='From'
           value={input1}
-          onChangeText={text => setInput1(text)}
+          onChangeText={setInput1}
         />
         <TouchableOpacity onPress={swapContent} style={styles.swapButton}>
           <Image source={require('../../assets/und.png')} style={styles.swapIcon} />
@@ -67,9 +83,8 @@ const RoundTrip = function ({ navigation }) {
           style={styles.textinputB}
           placeholder='To'
           value={input2}
-          onChangeText={text => setInput2(text)}
+          onChangeText={setInput2}
         />
-
         <View style={styles.row1}>
           <TextInput style={styles.textinput1} placeholder='Departure' />
           <TextInput style={styles.textinput2} placeholder='Return' />
@@ -79,7 +94,11 @@ const RoundTrip = function ({ navigation }) {
           <TextInput style={styles.textinput2} placeholder='Cabin Class' />
         </View>
         <View style={styles.row3}>
-          <Button buttonStyle={{ backgroundColor: '#00527E', borderRadius: 5, height: 49 }} title='Search Flight' />
+          <Button
+            buttonStyle={{ backgroundColor: '#00527E', borderRadius: 5, height: 49 }}
+            title={loading ? <ActivityIndicator color="#fff" /> : 'Search Flight'}
+            onPress={searchFlights}
+          />
         </View>
       </View>
     </View>
@@ -105,6 +124,11 @@ const styles = StyleSheet.create({
   book: {
     fontSize: 18,
     color: '#434343',
+  },
+  backButton: {
+    left: 10,
+    fontSize: 29,
+    color: 'black',
   },
   top: {
     display: 'flex',
@@ -148,9 +172,8 @@ const styles = StyleSheet.create({
   },
   swapButton: {
     position: 'absolute',
-    top: 45,
+    top: 40,
     zIndex: 1,
-    backgroundColor: 'white',
     padding: 5,
     borderRadius: 15,
   },
@@ -192,21 +215,5 @@ const styles = StyleSheet.create({
   row3: {
     width: '90%',
     marginTop: 20,
-  },
-  Ama: {
-    fontWeight: 'bold',
-    color: '#434343',
-  },
-  GO: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  column: {
-    marginTop: '15%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    color: 'black',
-    paddingLeft: '7%',
   },
 });

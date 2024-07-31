@@ -8,7 +8,13 @@ const FeedbackSuccess = () => {
   const navigation = useNavigation();
 
   const onGotoHomePressed = () => {
-    navigation.navigate("BottomTab");
+    navigation.navigate("BottomTab",{
+      screen: "Home",
+      params: {
+        feedback: "success",
+      },
+    }
+    );
   };
 
   return (
@@ -17,7 +23,7 @@ const FeedbackSuccess = () => {
         style={styles.animation}
         source={require("../../assets/ConfirmationPulse.json")}
         autoPlay
-        loop
+        loop = "false"
       />
 
       <Text style={styles.text}>
@@ -47,7 +53,7 @@ const styles = StyleSheet.create({
   animation: {
     width: "100%",
     height: 250,
-    top: -60,
+    top: -120,
   },
   button: {
     position: "absolute",
@@ -60,13 +66,14 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
     padding: 10,
-    alignItems: "center",
+    //alignItems: "center",
     fontSize: 20,
-    marginTop: 20,
+    //marginTop: 20,
     position: "absolute",
     bottom: "40%",
     left: "10%",
     width: "80%",
+    marginBottom: 30,
   },
 });
 

@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-import {
-  SafeAreaView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import { SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = "https://ucusngylouypldsoltnd.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdXNuZ3lsb3V5cGxkc29sdG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcyNjgxMDksImV4cCI6MjAzMjg0NDEwOX0.cQlMeHLv1Dd6gksfz0lO6Sd3asYfgXZrkRuCxIMnwqw";
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const ForgotPasswordEmail = () => {
   const navigation = useNavigation();
@@ -24,12 +21,20 @@ const ForgotPassword = ({ navigation }) => {
     return emailRegex.test(email);
   };
 
-  const onContinuePressed = () => {
+  const onContinuePressed = async () => {
     if (!validateEmail(email)) {
       Alert.alert("Invalid Email", "Please enter a valid email address.");
       return;
     }
-    navigation.navigate("EmailVerification", { email });
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email);
+      if (error) throw error;
+      Alert.alert("Email Sent", "A password reset link has been sent to your email.");
+      navigation.navigate("ResetPassword", { email });
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    }
   };
 
   const isEmailEmpty = email.length === 0;
@@ -57,7 +62,7 @@ const ForgotPassword = ({ navigation }) => {
         <TouchableOpacity
           style={[styles.button, isEmailEmpty ? styles.buttonInitial : styles.buttonFilled]}
           onPress={onContinuePressed}
-          disabled={isEmailEmpty} 
+          disabled={isEmailEmpty}
         >
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>

@@ -27,7 +27,7 @@ const AIChatScreen = () => {
     const options = {
       method: 'POST',
       headers: {
-        'x-rapidapi-key': '8d96448f6cmsh6976762dedf920ap10a7afjsn1d21cf7179c8',
+        'x-rapidapi-key': 'c761bf59d5mshf6a451fea71bbb6p1a57aajsnc6ac3c69a9d4',
         'x-rapidapi-host': 'chatgpt-42.p.rapidapi.com',
         'Content-Type': 'application/json'
       },
@@ -121,7 +121,7 @@ const AIChatScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{top:20}}>
           <MaterialCommunityIcons name="arrow-left" size={24} color="#fff" />
         </TouchableOpacity>
         <Image
@@ -175,17 +175,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#00527e",
     paddingVertical: 40,
     paddingHorizontal: 15,
+    height:105,
   },
   headerTitle: {
     color: "#fff",
     fontSize: 20,
     marginLeft: 10,
+    top:20
   },
   aiImage: {
     width: 50,
     height: 50,
     resizeMode: "contain",
     marginLeft: 10,
+    top: 20
   },
   aiImage1: {
     width: 30,

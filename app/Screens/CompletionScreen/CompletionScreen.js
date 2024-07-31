@@ -17,11 +17,11 @@ const CompletionScreen = () => {
         style={styles.animation}
         source={require("../../assets/ConfirmationPulse.json")}
         autoPlay
-        loop
+        loop={false}
       />
 
       <Text style={styles.text}>
-        Your account has been{"\n"}successfully created
+        A verification link has been sent to your email address {`\n`}Proceed to verify your account and login.
       </Text>
 
       <CustomButton

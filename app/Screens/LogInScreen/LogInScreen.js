@@ -1,17 +1,46 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, ScrollView, Dimensions } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Alert,
+  Dimensions,
+} from "react-native";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
+import { createClient } from "@supabase/supabase-js";
 import { useNavigation } from "@react-navigation/native";
 
-const { height } = Dimensions.get("window");
+const supabaseUrl = "https://ucusngylouypldsoltnd.supabase.co";
+const supabaseAnonKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdXNuZ3lsb3V5cGxkc29sdG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcyNjgxMDksImV4cCI6MjAzMjg0NDEwOX0.cQlMeHLv1Dd6gksfz0lO6Sd3asYfgXZrkRuCxIMnwqw";
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  
+  const { height } = Dimensions.get("window");
 
+  
 const LogInScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const navigation = useNavigation();
+
+  async function signInWithEmail() {
+    if (validateForm()) {
+      const { error, data } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+      if (error) {
+        Alert.alert(error.message);
+      } else {
+        console.log('login successful',data.user.id)
+        navigation.navigate("BottomTab");
+      }
+    }
+  }
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,18 +71,12 @@ const LogInScreen = () => {
     return valid;
   };
 
-  const onSignUpPressed = () => {
-    if (validateForm()) {
-      navigation.navigate('BottomTab');
-    }
-  };
-
   const logInPressed = () => {
-    navigation.navigate('ForgotPassword');
+    navigation.navigate("ForgotPassword");
   };
 
   const signUpPressed = () => {
-    navigation.navigate('SignUp');
+    navigation.navigate("SignUp");
   };
 
   return (
@@ -64,6 +87,7 @@ const LogInScreen = () => {
         <CustomInput
           placeholder="Email"
           value={email}
+          onChangeText={setEmail}
           setValue={setEmail}
           bordercolor={emailError ? "red" : "#7D7D7D"}
           borderRadius={15}
@@ -74,13 +98,16 @@ const LogInScreen = () => {
         <CustomInput
           placeholder="Password"
           value={password}
+          onChangeText={setPassword}
           setValue={setPassword}
           secureTextEntry={true}
           bordercolor={passwordError ? "red" : "#7D7D7D"}
           borderRadius={15}
           iconName="lock-closed"
         />
-        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+        {passwordError ? (
+          <Text style={styles.errorText}>{passwordError}</Text>
+        ) : null}
 
         <Text style={styles.link} onPress={logInPressed}>
           Forgot your password?
@@ -89,7 +116,7 @@ const LogInScreen = () => {
         <View style={styles.bottomSection}>
           <CustomButton
             text="Next"
-            onPress={onSignUpPressed}
+            onPress={signInWithEmail}
             bg="#00527e"
             txt="white"
             style={styles.button}
@@ -118,11 +145,11 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   input: {
-    marginBottom: 20, 
+    marginBottom: 20,
   },
   link: {
     color: "#00527e",
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     marginBottom: 20,
   },
   button: {
@@ -130,7 +157,7 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: "center",
-    marginTop: 20, 
+    marginTop: 20,
   },
   title: {
     fontSize: 24,
@@ -138,12 +165,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   bottomSection: {
-    marginTop: height * 0.15, 
-    width: '100%',
-    alignItems: 'center',
+    marginTop: height * 0.15,
+    width: "100%",
+    alignItems: "center",
   },
   errorText: {
-    color: 'red',
+    color: "red",
     marginTop: 5,
     marginBottom: 10,
   },

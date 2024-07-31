@@ -9,13 +9,13 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate('PaymentMethods');
   };
 
-  //const onMyAccountPressed = () => {
-    //if (isLoggedIn) {
-      //navigation.navigate('MyAccountUser'); 
-    //} else {
-      //navigation.navigate('MyAccounts'); 
-    //}
-  //};
+  // const onMyAccountPressed = () => {
+  //   if (isLoggedIn) {
+  //     navigation.navigate('MyAccountUser'); 
+  //   } else {
+  //     navigation.navigate('MyAccounts'); 
+  //   }
+  // };
 
   const onMyAccountUserPressed = () => {
     navigation.navigate('MyAccountUser'); 

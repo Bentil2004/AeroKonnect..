@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 const CustomInput = ({
   placeholder,
   value,
-  setValue,
+  onChangeText,
   secureTextEntry,
   bordercolor,
   borderRadius,
@@ -22,7 +22,7 @@ const CustomInput = ({
         placeholder={placeholder}
         placeholderTextColor="#888"
         value={value}
-        onChangeText={setValue}
+        onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
       />
     </View>

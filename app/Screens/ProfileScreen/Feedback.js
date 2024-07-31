@@ -56,7 +56,7 @@ const Feedback = ({ navigation }) => {
         <Text style={styles.label}>Contact Information (Optional)</Text>
         <TextInput
           style={styles.textContact}
-          placeholder="If you would like us to follow up with you,  please leave your email address"
+          placeholder="If you would like us to follow up with you,please leave your email address"
           value={email}
           onChangeText={setEmail}
         />

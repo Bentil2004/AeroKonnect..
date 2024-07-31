@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',
-    marginLeft: 30,
+    //marginLeft: 30,
     marginBottom: 50,
   },
   instruction: {

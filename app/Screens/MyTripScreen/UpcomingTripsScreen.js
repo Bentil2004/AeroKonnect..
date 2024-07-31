@@ -39,6 +39,10 @@ const UpcomingTripsScreen = ({ navigation }) => {
     setUpcomingTrips(upcomingTrips.filter((_, i) => i !== index));
   };
 
+  const Home = () => {
+    navigation.navigate('Oneway');
+  };
+
   return (
     <SafeAreaView style={styles.safeContainer}>
       <Text style={styles.text}>MY TRIP</Text>
@@ -63,6 +67,7 @@ const UpcomingTripsScreen = ({ navigation }) => {
             bg={"#00527e"}
             fontSize="bold"
             txt={"white"}
+            onPress={Home}
           />
           <CustomButton 
             text="Add a trip"

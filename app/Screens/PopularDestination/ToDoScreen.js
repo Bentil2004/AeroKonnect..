@@ -7,6 +7,10 @@ const ToDoScreen = ({ route }) => {
   const { activity } = route.params;
   const navigation = useNavigation();
 
+  const details = activity.details || [];
+
+  
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.header} onPress={() => navigation.goBack()}>
@@ -14,23 +18,20 @@ const ToDoScreen = ({ route }) => {
         <Text style={styles.headerTitle}>{activity.title}</Text>
       </TouchableOpacity>
       
-      <Image source={activity.image} style={styles.image} />
+      <Image source={{ uri: activity.image }} style={styles.image} />
       <View style={styles.contentContainer}>
         <ScrollView>
-        <Text style={styles.title}>{activity.title}</Text>
-        <Text style={styles.description}>{activity.description}</Text>
-        <Text style={styles.subtitle}>You can do many things when you visit Mount Fuji</Text>
-      <Text style={styles.sectionTitle}>1. Climb Mount Fuji:</Text>
-      <Text style={styles.listItem}>• Summit Hike: Tackle the Yoshida, Subashiri, Gotemba, or Fujinomiya trails to reach the summit.</Text>
-      <Text style={styles.listItem}>• Sunrise Hike: Start your hike at night to witness the sunrise from the summit, known as "Goraiko."</Text>
-      <Text style={styles.sectionTitle}>2. Visit the Fuji Five Lakes:</Text>
-      <Text style={styles.listItem}>• Lake Kawaguchi: Enjoy scenic views, boating, and hot springs.</Text>
-      <Text style={styles.listItem}>• Lake Yamanaka: Ideal for water sports and bird watching.</Text>
-      <Text style={styles.listItem}>• Lake Saiko: Known for camping and the Aokigahara forest.</Text>
-      <Text style={styles.listItem}>• Lake Shoji: The smallest lake, perfect for a peaceful retreat.</Text>
-      <Text style={styles.listItem}>• Lake Motosu: Famous for the view depicted on the 1,000 yen bill.</Text>
+          <Text style={styles.title}>{activity.title}</Text>
+          <Text style={styles.description}>{activity.description}</Text>
+          {details.map((detail, index) => (
+            <View key={index}>
+              <Text style={styles.sectionTitle}>{detail.title}</Text>
+              {detail.items.map((item, itemIndex) => (
+                <Text key={itemIndex} style={styles.listItem}>• {item}</Text>
+              ))}
+            </View>
+          ))}
         </ScrollView>
-
       </View>
     </SafeAreaView>
   );
@@ -68,10 +69,6 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 15,
   },
-  subtitle: {
-    fontSize: 16,
-    marginBottom: 16,
-  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -81,7 +78,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginVertical: 4,
   },
-
 });
 
 export default ToDoScreen;

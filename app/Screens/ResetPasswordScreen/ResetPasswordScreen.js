@@ -10,11 +10,17 @@ import {
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = "https://ucusngylouypldsoltnd.supabase.co";
+const supabaseAnonKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdXNuZ3lsb3V5cGxkc29sdG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcyNjgxMDksImV4cCI6MjAzMjg0NDEwOX0.cQlMeHLv1Dd6gksfz0lO6Sd3asYfgXZrkRuCxIMnwqw";
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const ResetPasswordScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { email, phoneNumber } = route.params;
+  const { email } = route.params;
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -22,37 +28,49 @@ const ResetPasswordScreen = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isPasswordReset, setIsPasswordReset] = useState(false);
 
-  const validatePassword = (password) => {
-    return password.length >= 8;
-  };
+  const validatePassword = (password) => password.length >= 8;
 
-  const resetPassword = () => {
+  const resetPassword = async () => {
     if (password !== confirmPassword) {
       Alert.alert("Password Mismatch", "Passwords do not match.");
       return;
     }
 
     if (!validatePassword(password)) {
-      Alert.alert("Weak Password", "Password must be at least 8 characters long.");
+      Alert.alert(
+        "Weak Password",
+        "Password must be at least 8 characters long."
+      );
       return;
     }
 
-   
-    setIsPasswordReset(true);
-    setTimeout(() => {
-      setIsPasswordReset(false);
-      navigation.navigate("LogIn");
-    }, 2000); 
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: password,
+      });
+      if (error) throw error;
+      setIsPasswordReset(true);
+      setTimeout(() => {
+        setIsPasswordReset(false);
+        navigation.navigate("LogIn");
+      }, 2000);
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    }
   };
 
-  const isFormIncomplete = password.length < 1 || confirmPassword.length < 1 || password !== confirmPassword;
+  const isFormIncomplete =
+    password.length < 1 ||
+    confirmPassword.length < 1 ||
+    password !== confirmPassword;
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <Text style={styles.title}>Set A New Password</Text>
         <Text style={styles.subtitle}>
-          Create a new password. Ensure it differs from{"\n"} previous ones for security
+          Create a new password. Ensure it differs from{"\n"} previous ones for
+          security
         </Text>
         <View style={styles.inputContainer}>
           <TouchableOpacity
@@ -95,16 +113,21 @@ const ResetPasswordScreen = () => {
           />
         </View>
         <TouchableOpacity
-          style={[styles.button, isFormIncomplete ? styles.buttonInitial : styles.buttonFilled]}
+          style={[
+            styles.button,
+            isFormIncomplete ? styles.buttonInitial : styles.buttonFilled,
+          ]}
           onPress={resetPassword}
-          disabled={isFormIncomplete} 
+          disabled={isFormIncomplete}
         >
           <Text style={styles.buttonText}>Update Password</Text>
         </TouchableOpacity>
         {isPasswordReset && (
           <View style={styles.successContainer}>
             <Icon name="check-circle" size={50} color="green" />
-            <Text style={styles.successText}>Password has been successfully reset</Text>
+            <Text style={styles.successText}>
+              Password has been successfully reset
+            </Text>
           </View>
         )}
       </View>
@@ -159,10 +182,10 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   buttonInitial: {
-    backgroundColor: "#add8e6", 
+    backgroundColor: "#add8e6",
   },
   buttonFilled: {
-    backgroundColor: "#00527E", 
+    backgroundColor: "#00527E",
   },
   buttonText: {
     color: "white",

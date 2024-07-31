@@ -35,10 +35,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     zIndex: 1000,
-    padding: -10,
-   
-  
-    
+    padding: -10,   
   },
   backButton: {
     position: 'absolute',
@@ -53,9 +50,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontWeight: 'bold',
     marginRight: 10,
-    
-    
-
   },
   button: {
     flexDirection: 'row',

@@ -66,9 +66,13 @@ const TripDetails = () => {
     Alert.alert("Copied to Clipboard", text);
   };
 
+
   const onDonePressed = () => {
-    navigation.navigate('UpcomingTrips');
-  }
+    navigation.navigate('BottomTab', {
+      screen: 'My Trip'
+    });
+  };
+
 
   return (
     <View style={styles.safeArea}>
