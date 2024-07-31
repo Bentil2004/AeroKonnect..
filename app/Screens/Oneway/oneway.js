@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity } from 'react-native';
+import { StatusBar, View, Text, TextInput, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
 
 const OneWay = ({ navigation }) => {
@@ -8,8 +7,10 @@ const OneWay = ({ navigation }) => {
   const [to, setTo] = useState('');
   const [departureDate, setDepartureDate] = useState('');
   const [passengers, setPassengers] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const searchFlights = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch('https://sky-scanner3.p.rapidapi.com/flights/search-one-way?fromEntityId=PARI&cabinClass=economy', {
         method: 'GET',
@@ -23,6 +24,8 @@ const OneWay = ({ navigation }) => {
       navigation.navigate('AvailableFlight', { flights: data });
     } catch (error) {
       console.error('Error fetching flights:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -88,7 +91,7 @@ const OneWay = ({ navigation }) => {
         <View style={styles.row3}>
           <Button
             buttonStyle={{ backgroundColor: '#00527E', borderRadius: 5, height: 49 }}
-            title='Search Flight'
+            title={isLoading ? <ActivityIndicator color="#fff" /> : 'Search Flight'}
             onPress={searchFlights}
           />
         </View>
@@ -99,11 +102,12 @@ const OneWay = ({ navigation }) => {
 
 export default OneWay;
 
+
 const styles = StyleSheet.create({
   container2: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     marginTop: 80,
   },
   topback: {
@@ -113,29 +117,29 @@ const styles = StyleSheet.create({
   backButton: {
     left: 10,
     fontSize: 29,
-    color: 'black',
+    color: "black",
   },
   book: {
     fontSize: 18,
-    color: '#434343',
+    color: "#434343",
   },
   top: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     gap: 103,
-    alignItems: 'center',
-    top: '20%',
-    left: '3%',
+    alignItems: "center",
+    top: "20%",
+    left: "3%",
   },
   economyParent: {
     width: 100,
     height: 41,
-    backgroundColor: '#E4EAF1',
+    backgroundColor: "#E4EAF1",
     borderRadius: 7,
     overflow: "hidden",
     marginBottom: -60,
-    bottom: '18%',
-    right: '30%',
+    bottom: "18%",
+    right: "30%",
   },
   economy: {
     top: 11,
@@ -154,12 +158,12 @@ const styles = StyleSheet.create({
     height: 18,
     textAlign: "left",
     fontWeight: "500",
-    color: '#434343'
+    color: "#434343",
   },
   row1: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
     bottom: 1,
     marginTop: 50,
     left: 7,
@@ -167,8 +171,8 @@ const styles = StyleSheet.create({
   textinputA: {
     border: 1,
     borderWidth: 1,
-    borderColor: '#00527E',
-    width: '90%',
+    borderColor: "#00527E",
+    width: "90%",
     height: 50,
     borderRadius: 10,
     paddingLeft: 8,
@@ -177,8 +181,8 @@ const styles = StyleSheet.create({
   textinputB: {
     border: 1,
     borderWidth: 1,
-    borderColor: '#00527E',
-    width: '90%',
+    borderColor: "#00527E",
+    width: "90%",
     height: 50,
     borderRadius: 10,
     paddingLeft: 8,
@@ -187,8 +191,8 @@ const styles = StyleSheet.create({
   textinput1: {
     border: 1,
     borderWidth: 1,
-    borderColor: '#00527E',
-    width: '43%',
+    borderColor: "#00527E",
+    width: "43%",
     height: 50,
     borderRadius: 10,
     paddingLeft: 8,
@@ -197,45 +201,45 @@ const styles = StyleSheet.create({
   textinput2: {
     border: 1,
     borderWidth: 1,
-    borderColor: '#00527E',
-    width: '45%',
+    borderColor: "#00527E",
+    width: "45%",
     height: 50,
     borderRadius: 10,
     paddingLeft: 8,
     right: 3,
   },
   row3: {
-    width: '90%',
+    width: "90%",
     marginTop: 20,
   },
   Ama: {
-    fontWeight: 'bold',
-    color: '#434343',
+    fontWeight: "bold",
+    color: "#434343",
   },
   GO: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   column: {
-    marginTop: '15%',
+    marginTop: "15%",
     display: "flex",
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    color: 'black',
-    paddingLeft: '7%',
+    flexDirection: "column",
+    justifyContent: "space-between",
+    color: "black",
+    paddingLeft: "7%",
   },
   mainbut: {
     border: 1,
     height: 50,
     marginLeft: 20,
-    width: '90%',
-    backgroundColor: '#E4EAF1',
+    width: "90%",
+    backgroundColor: "#E4EAF1",
     borderRadius: 12,
-    marginTop: '25%',
+    marginTop: "25%",
     padding: 8,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });

@@ -8,19 +8,20 @@ import {
   View,
   TouchableOpacity,
   Image,
+  ActivityIndicator, // Import ActivityIndicator
 } from "react-native";
 import { Button } from "react-native-elements";
 
 const MultiCity = ({ navigation }) => {
   const [addFlight, setAddFlight] = useState([]);
   const [count, setCount] = useState(3);
-
   const [input1, setInput1] = useState("");
   const [input2, setInput2] = useState("");
   const [input3, setInput3] = useState("");
   const [input4, setInput4] = useState("");
   const [input5, setInput5] = useState("");
   const [input6, setInput6] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   const swapContent = () => {
     const temp = input1;
@@ -68,6 +69,7 @@ const MultiCity = ({ navigation }) => {
   };
 
   const searchFlights = async () => {
+    setIsLoading(true); // Start loading
     try {
       const response = await fetch("https://sky-scanner3.p.rapidapi.com/flights/search-one-way?fromEntityId=PARI&cabinClass=economy", {
         method: "GET",
@@ -81,6 +83,8 @@ const MultiCity = ({ navigation }) => {
       navigation.navigate("AvailableFlight", { flights: data });
     } catch (error) {
       console.error("Error fetching flights:", error);
+    } finally {
+      setIsLoading(false); // End loading
     }
   };
 
@@ -189,7 +193,7 @@ const MultiCity = ({ navigation }) => {
             <View style={styles.row3}>
               <Button
                 buttonStyle={{ backgroundColor: "#00527E", borderRadius: 5, height: 49 }}
-                title="Search Flight"
+                title={isLoading ? <ActivityIndicator color="#fff" /> : "Search Flight"}
                 onPress={searchFlights}
               />
             </View>
