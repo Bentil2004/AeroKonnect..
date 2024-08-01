@@ -1,19 +1,42 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from 'expo-linear-gradient';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-const images = [
-  require("../../assets/Airplanemodel.jpg"),
-  require("../../assets/images/CTEdit.png"),
-  require("../../assets/AirlineBG.png"), 
+const screens = [
+  {
+    image: require("../../assets/images/CTEdit.png"),
+    upperText: "AEROKONNECT\nSeamless Travels, Boundless Horizons",
+    bottomText: "Book. Fly. Enjoy. Discover new Destinations. Effortless reservations, Tailored experiences just for you. Your Adventure Awaits!"
+  },
+  {
+    image: require("../../assets/He.jpg"),
+    upperText: "Explore the World\nwith Comfort",
+    bottomText: "We bring you closer to your dream destinations with unparalleled comfort and ease."
+  },
+  {
+    image: require("../../assets/She.jpg"),
+    upperText: "Unmatched Luxury\nin Every Journey",
+    bottomText: "Stroll through charming streets, savor exquisite cuisine, and marvel at iconic landmarks."
+  },
 ];
 
 const NextWelcomeScreen = () => {
   const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef(null);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const nextIndex = (currentIndex + 1) % screens.length;
+      setCurrentIndex(nextIndex);
+      flatListRef.current.scrollToIndex({ index: nextIndex, animated: true });
+    }, 4000); 
+
+    return () => clearInterval(intervalId); 
+  }, [currentIndex]);
 
   const onSkipPressed = () => {
     navigation.navigate('SignIn');
@@ -29,13 +52,23 @@ const NextWelcomeScreen = () => {
   };
 
   const renderItem = ({ item }) => (
-    <Image source={item} style={styles.image} resizeMode="cover" />
+    <View style={styles.slide}>
+      <Image source={item.image} style={styles.image} resizeMode="cover" />
+      <View style={styles.textContainer}>
+        <Text style={styles.upperText}>
+          {item.upperText}
+        </Text>
+        <Text style={styles.bottomText}>
+          {item.bottomText}
+        </Text>
+      </View>
+    </View>
   );
 
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={['#0000', '#0000']} style={styles.container}>
       <FlatList
-        data={images}
+        data={screens}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         horizontal
@@ -43,21 +76,8 @@ const NextWelcomeScreen = () => {
         onScroll={handleScroll}
         showsHorizontalScrollIndicator={false}
         ref={flatListRef}
+        contentContainerStyle={styles.flatListContent}
       />
-      <View style={styles.upperTextContainer}>
-        <Text style={styles.upperText}>
-          AEROKONNECT{"\n"}
-          <Text style={styles.slogan}>Seamless Travels, Boundless Horizons</Text>
-        </Text>
-      </View>
-
-      <View style={styles.bottomTextContainer}>
-        <Text style={styles.bottomText}>
-          Book. Fly. Enjoy. Discover new Destinations. Effortless reservations,{"\n"} 
-          Tailored experiences just for you. Your Adventure Awaits!
-        </Text>
-      </View>
-
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={onSkipPressed}>
           <Text style={styles.buttonText}>Join Us Now</Text>
@@ -68,7 +88,7 @@ const NextWelcomeScreen = () => {
       </View>
 
       <View style={styles.indicatorContainer}>
-        {images.map((_, index) => (
+        {screens.map((_, index) => (
           <View
             key={index}
             style={[
@@ -78,75 +98,84 @@ const NextWelcomeScreen = () => {
           />
         ))}
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffff",
+  },
+  flatListContent: {
+    paddingHorizontal: 0,
+  },
+  slide: {
+    width,
+    height,
+    alignItems: 'center',
   },
   image: {
-    width,
-    height: '100%',
+    width: '100%',
+    height: '55%',
+    backgroundColor: 'blue',
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
   },
-  upperTextContainer: {
+  textContainer: {
     position: 'absolute',
-    top: 50,
-    left: '10%',
-    width: '80%',
-    borderRadius: 5,
+    top: '60%', 
+    width: '90%',
+    alignItems: 'center',
   },
   upperText: {
-    fontSize: 24,
-    fontWeight: '500',
+    fontSize: 22,
+    fontWeight: '600',
     color: '#00527E',
     textAlign: 'center',
-  },
-  slogan: {
-    fontSize: 16,
-  },
-  bottomTextContainer: {
-    position: 'absolute',
-    bottom: '20%',
-    left: '10%',
-    width: '80%',
-    borderRadius: 5,
+    marginBottom: 10,
   },
   bottomText: {
     textAlign: 'center',
     color: '#00527E',
     fontSize: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    padding: 10,
+    borderRadius: 10,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: '10%',
-    left: '10%',
+    bottom: '15%', 
     width: '80%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    left: '10%',
   },
   button: {
     backgroundColor: '#00527E',
-    padding: 10,
-    borderRadius: 5,
+    padding: 12,
+    borderRadius: 10,
     width: '45%',
     alignItems: 'center',
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: '600',
   },
   indicatorContainer: {
     position: 'absolute',
-    bottom: 30,
-    alignSelf: 'center',
+    bottom: '8%', 
     flexDirection: 'row',
+    alignSelf: 'center',
   },
   indicator: {
-    width: 10,
-    height: 10,
+    width: 8,
+    height: 8,
     borderRadius: 5,
     margin: 5,
   },
