@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
+import { useTranslation } from 'react-i18next';
 
 const { height } = Dimensions.get("window");
 
@@ -24,6 +25,8 @@ const HomeScreen = () => {
   const [likedItems, setLikedItems] = useState({});
   const [searchQuery, setSearchQuery] = useState("Accra");
   const [filteredData, setFilteredData] = useState(null);
+
+  const { t } = useTranslation();
 
   const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -38,10 +41,9 @@ const HomeScreen = () => {
   //   }));
   // };
 
-  useEffect(() =>{
+  useEffect(() => {
     handleSearch();
-  },[])
-  
+  }, []);
 
   const [location, setLocation] = useState({
     latitude: 37.78825,
@@ -51,7 +53,7 @@ const HomeScreen = () => {
   const [placeDetails, setPlaceDetails] = useState([]);
 
   const handleSearch = async () => {
-    console.log(search)
+    console.log(search);
     const geocodeUrl = `https://google-maps-geocoding.p.rapidapi.com/geocode/json?address=${encodeURIComponent(search)}&language=en`;
     const geocodeOptions = {
       method: 'GET',
@@ -98,18 +100,17 @@ const HomeScreen = () => {
             ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=AIzaSyCLkvlVymR7LU-xm61NjaWDFHtUjT9f5cs`
             : null;
 
-
-            return {
-              id: place.place_id, 
-              name: place.name,
-              address: place.vicinity,
-              photoUrl,
-              description: place.types.join(', '), 
-              price: (Math.random() * 1000).toFixed(3), 
-              images: [photoUrl, photoUrl, photoUrl], 
-              todo: [{ title: "Activity", description: place.types.join(', '), image: photoUrl }],
-            };
-          });
+          return {
+            id: place.place_id,
+            name: place.name,
+            address: place.vicinity,
+            photoUrl,
+            description: place.types.join(', '),
+            price: (Math.random() * 1000).toFixed(3),
+            images: [photoUrl, photoUrl, photoUrl],
+            todo: [{ title: "Activity", description: place.types.join(', '), image: photoUrl }],
+          };
+        });
 
         const resolvedPlaceDetails = await Promise.all(placeDetailsPromises);
         console.log('Resolved Place Details:', resolvedPlaceDetails);
@@ -123,7 +124,7 @@ const HomeScreen = () => {
     }
   };
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate('PopularDestination', { destination: item })}>
       <View style={styles.placeContainer}>
         <Text style={styles.placeName} numberOfLines={1}>{item.name}</Text>
@@ -131,7 +132,7 @@ const HomeScreen = () => {
         {item.photoUrl ? (
           <Image source={{ uri: item.photoUrl }} style={styles.placeImage} />
         ) : (
-          <Text>No Image Available</Text>
+          <Text>{t('No Image Available')}</Text>
         )}
       </View>
     </TouchableOpacity>
@@ -150,8 +151,8 @@ const HomeScreen = () => {
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.Text}>
-            Good Morning, Ama{"\n"}
-            <Text style={styles.text}>Where are you going?</Text>
+            {t('Good Morning')}, Ama{"\n"}
+            <Text style={styles.text}>{t('Where are you going?')}</Text>
           </Text>
           <TouchableOpacity onPress={onBellOutlinePressed}>
             <MaterialCommunityIcons
@@ -164,7 +165,7 @@ const HomeScreen = () => {
 
         <View style={styles.inputContainer}>
           <CustomInput
-            placeholder="Search for your next destination"
+            placeholder={t('Search for your next destination')}
             bordercolor="#7D7D7D"
             borderRadius="7"
             iconName="search"
@@ -191,7 +192,7 @@ const HomeScreen = () => {
               source={require("../../assets/images/inclined.png")}
               style={styles.bookFlightButtonImage}
             />
-            <Text style={styles.bookFlightButtonText}>Book a flight</Text>
+            <Text style={styles.bookFlightButtonText}>{t('Book a flight')}</Text>
           </View>
         </TouchableOpacity>
 
@@ -203,7 +204,7 @@ const HomeScreen = () => {
           )}
           scrollEventThrottle={16}
         >
-          <Text style={styles.sectionTitle}>Popular Destinations</Text>
+          <Text style={styles.sectionTitle}>{t('Popular Destinations')}</Text>
           <FlatList
             data={placeDetails}
             horizontal={true}
@@ -212,43 +213,9 @@ const HomeScreen = () => {
             contentContainerStyle={styles.flatListContainer}
           />
 
-          <Text style={styles.sectionTitle}>Good Deals Just For You</Text>
+          <Text style={styles.sectionTitle}>{t('Good Deals Just For You')}</Text>
           <Text style={styles.writing}>
-            Save 20% on Flights to Europe! Book your summer getaway now
-          </Text>
-          <FlatList
-            data={placeDetails}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            renderItem={renderItem}
-            contentContainerStyle={styles.flatListContainer}
-          />
-
-          <Text style={styles.sectionTitle}>Trip Inscription</Text>
-          <Text style={styles.writing}>
-            Experience the world through new cultures and breathtaking landscapes.
-          </Text>
-          <FlatList
-            data={placeDetails}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            renderItem={renderItem}
-            contentContainerStyle={styles.flatListContainer}
-          />
-          <Text style={styles.sectionTitle}>Trip Inscription</Text>
-          <Text style={styles.writing}>
-            Experience the world through new cultures and breathtaking landscapes.
-          </Text>
-          <FlatList
-            data={placeDetails}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            renderItem={renderItem}
-            contentContainerStyle={styles.flatListContainer}
-          />
-          <Text style={styles.sectionTitle}>Trip Inscription</Text>
-          <Text style={styles.writing}>
-            Experience the world through new cultures and breathtaking landscapes.
+            {t('Save 20% on Flights to Europe! Book your summer getaway now')}
           </Text>
           <FlatList
             data={placeDetails}
@@ -258,7 +225,43 @@ const HomeScreen = () => {
             contentContainerStyle={styles.flatListContainer}
           />
 
-          <Text style={styles.sectionTitle}>Recreational Sites Around the World</Text>
+          <Text style={styles.sectionTitle}>{t('Trip Inscription')}</Text>
+          <Text style={styles.writing}>
+            {t('Experience the world through new cultures and breathtaking landscapes.')}
+          </Text>
+          <FlatList
+            data={placeDetails}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            renderItem={renderItem}
+            contentContainerStyle={styles.flatListContainer}
+          />
+
+          <Text style={styles.sectionTitle}>{t('Trip Inscription')}</Text>
+          <Text style={styles.writing}>
+            {t('Experience the world through new cultures and breathtaking landscapes.')}
+          </Text>
+          <FlatList
+            data={placeDetails}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            renderItem={renderItem}
+            contentContainerStyle={styles.flatListContainer}
+          />
+
+          <Text style={styles.sectionTitle}>{t('Trip Inscription')}</Text>
+          <Text style={styles.writing}>
+            {t('Experience the world through new cultures and breathtaking landscapes.')}
+          </Text>
+          <FlatList
+            data={placeDetails}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            renderItem={renderItem}
+            contentContainerStyle={styles.flatListContainer}
+          />
+
+          <Text style={styles.sectionTitle}>{t('Recreational Sites Around the World')}</Text>
           <FlatList
             data={placeDetails}
             horizontal={true}
@@ -291,7 +294,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 16,
-    
   },
   Text: {
     fontSize: 20,
@@ -369,10 +371,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 100,
     right: 20,
-    //width: 60,
-    //height: 60,
     borderRadius: 25,
-    //backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",

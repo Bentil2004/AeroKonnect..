@@ -1,19 +1,21 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const SettingsScreen = ({ navigation }) => {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.backButton} onPress={() => navigation.navigate('BottomTab')}>←</Text>
-        <Text style={styles.headerText}>Settings</Text>
+        <Text style={styles.headerText}>{t('Settings')}</Text>
       </View>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CountryLanguageSearch')}>
-        <Text style={styles.buttonText}>Country & language</Text>
+        <Text style={styles.buttonText}>{t('Country & language')}</Text>
         <Text style={styles.arrow}>→</Text>
       </TouchableOpacity>
-      
-      <Text style={styles.appVersion}>App Version 0.00</Text>
+      <Text style={styles.appVersion}>{t('App Version 0.00')}</Text>
     </View>
   );
 };
@@ -25,17 +27,14 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#005f80',
-   flexDirection: 'row',
+    flexDirection: 'row',
     alignItems: 'flex-start',
     padding: 30,
-  
-    
   },
   backButton: {
     color: 'white',
     fontSize: 30,
-    top: 20
-    
+    top: 20,
   },
   headerText: {
     color: 'white',
@@ -43,9 +42,6 @@ const styles = StyleSheet.create({
     marginLeft: 80,
     marginTop: 25,
     fontWeight: 'bold',
-    
-    
-
   },
   button: {
     flexDirection: 'row',
