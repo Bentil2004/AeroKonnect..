@@ -55,68 +55,75 @@ import explore from "../app/Screens/ExploreScreen/ExploreScreen";
 import explore2 from "../app/Screens/ExploreScreen/Explore2";
 //import PayStackTest from "./../app/Screens/PayStackTest";
 import AvailableFlight from "../app/Screens/AvailableFlight/AvailableFlight1";
+import { I18nextProvider } from "react-i18next";
+import i18next from "i18next";
+import { LanguageProvider } from "../LanguageProvider";
 
 
 const Stack = createNativeStackNavigator();
 
 const MainStackNavigator = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="SplashScreen" component={SplashScreen} />
-        <Stack.Screen name="EmailVerification" component={EmailVerificationScreen} />
-        {/* <Stack.Screen name="PaySack" component={PayStackTest} /> */}
-        <Stack.Screen name="SeatSelection" component={SeatSelection} />
-        <Stack.Screen name="PhoneNumberVerification" component={PhoneNumberVerificationScreen} />
-        <Stack.Screen name="AvailableFlight" component={AvailableFlight} />
-        <Stack.Screen name="SignUpDetails" component={SignUpDetailsScreen} />
-        <Stack.Screen name="PassengersDetails" component={PassengersDetails} />
-        <Stack.Screen name="Map" component={Map} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="CompletionScreen" component={CompletionScreen} />
-        <Stack.Screen name="PopularDestination" component={PopularDestination} />
-        <Stack.Screen name="BottomTab" component={BottomTabNavigator} />
-        <Stack.Screen name="NextWelcome" component={NextWelcomeScreen} />
-        <Stack.Screen name="MyTripScreen" component={MyTripScreen} />
-        <Stack.Screen name="UpcomingTrips" component={UpcomingTripsScreen} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-        <Stack.Screen name="PaymentMethods" component={PaymentMethodsScreen} />
-        <Stack.Screen name="MyAccounts" component={MyAccount} />
-        <Stack.Screen name="MyAccountUser" component={MyAccountUser} />
-        <Stack.Screen name="ManageAccount" component={ManageAccount} />
-        <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
-        <Stack.Screen name="AIChat" component={AIChatScreen} />
-        <Stack.Screen name="Oneway" component={Oneway} />
-        <Stack.Screen name="MultiCity" component={MultiCity} />
-        <Stack.Screen name="Home" component={RoundTrip} />
-        <Stack.Screen name="TripDetails" component={TripDetails} />
-        <Stack.Screen name="EditDetails" component={EditDetails} />
-        <Stack.Screen name="ChangePassword" component={ChangePassword} />
-        <Stack.Screen name="DeleteAccount" component={DeleteAccount} />
-        <Stack.Screen name="LogoutModal" component={LogoutModal} />
-        <Stack.Screen name="ForgotPasswordEmail" component={ForgotPasswordEmail} />
-        <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} />
-        <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="LogIn" component={LogInScreen} />
-        <Stack.Screen name="ForgotPasswordPhone" component={ForgotPasswordPhone}/>
-        <Stack.Screen name="Notification" component={Notification} />
-        <Stack.Screen name="PhoneNumberVerificationForgotPassword" component={PhoneNumberVerificationScreenForgotPassword} />
-        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
-        <Stack.Screen name="ToDo" component={ToDoScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="CountryLanguageSearch" component={CountryLanguageSearch} />
-        <Stack.Screen name="PaymentMethodsSeats" component={PaymentMethods} />
-        <Stack.Screen name="ConfirmationScreen" component={ConfirmationScreen} />
-        <Stack.Screen name="LegalInfo" component={LegalInfo} />
-        <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
-        <Stack.Screen name="Feedback" component={Feedback} />
-        <Stack.Screen name="FeedbackSuccess" component={FeedbackSuccess} />
-        <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
-        <Stack.Screen name="explore" component={explore} />
-        <Stack.Screen name="explore2" component={explore2} />
-        {/* <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} /> */}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <I18nextProvider i18n={i18next}>
+      <LanguageProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="SplashScreen" component={SplashScreen} />
+            <Stack.Screen name="EmailVerification" component={EmailVerificationScreen} />
+            {/* <Stack.Screen name="PaySack" component={PayStackTest} /> */}
+            <Stack.Screen name="SeatSelection" component={SeatSelection} />
+            <Stack.Screen name="PhoneNumberVerification" component={PhoneNumberVerificationScreen} />
+            <Stack.Screen name="AvailableFlight" component={AvailableFlight} />
+            <Stack.Screen name="SignUpDetails" component={SignUpDetailsScreen} />
+            <Stack.Screen name="PassengersDetails" component={PassengersDetails} />
+            <Stack.Screen name="Map" component={Map} />
+            <Stack.Screen name="SignUp" component={SignUpScreen} />
+            <Stack.Screen name="CompletionScreen" component={CompletionScreen} />
+            <Stack.Screen name="PopularDestination" component={PopularDestination} />
+            <Stack.Screen name="BottomTab" component={BottomTabNavigator} />
+            <Stack.Screen name="NextWelcome" component={NextWelcomeScreen} />
+            <Stack.Screen name="MyTripScreen" component={MyTripScreen} />
+            <Stack.Screen name="UpcomingTrips" component={UpcomingTripsScreen} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+            <Stack.Screen name="PaymentMethods" component={PaymentMethodsScreen} />
+            <Stack.Screen name="MyAccounts" component={MyAccount} />
+            <Stack.Screen name="MyAccountUser" component={MyAccountUser} />
+            <Stack.Screen name="ManageAccount" component={ManageAccount} />
+            <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
+            <Stack.Screen name="AIChat" component={AIChatScreen} />
+            <Stack.Screen name="Oneway" component={Oneway} />
+            <Stack.Screen name="MultiCity" component={MultiCity} />
+            <Stack.Screen name="Home" component={RoundTrip} />
+            <Stack.Screen name="TripDetails" component={TripDetails} />
+            <Stack.Screen name="EditDetails" component={EditDetails} />
+            <Stack.Screen name="ChangePassword" component={ChangePassword} />
+            <Stack.Screen name="DeleteAccount" component={DeleteAccount} />
+            <Stack.Screen name="LogoutModal" component={LogoutModal} />
+            <Stack.Screen name="ForgotPasswordEmail" component={ForgotPasswordEmail} />
+            <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} />
+            <Stack.Screen name="SignIn" component={SignInScreen} />
+            <Stack.Screen name="LogIn" component={LogInScreen} />
+            <Stack.Screen name="ForgotPasswordPhone" component={ForgotPasswordPhone}/>
+            <Stack.Screen name="Notification" component={Notification} />
+            <Stack.Screen name="PhoneNumberVerificationForgotPassword" component={PhoneNumberVerificationScreenForgotPassword} />
+            <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+            <Stack.Screen name="ToDo" component={ToDoScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="CountryLanguageSearch" component={CountryLanguageSearch} />
+            <Stack.Screen name="PaymentMethodsSeats" component={PaymentMethods} />
+            <Stack.Screen name="ConfirmationScreen" component={ConfirmationScreen} />
+            <Stack.Screen name="LegalInfo" component={LegalInfo} />
+            <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+            <Stack.Screen name="Feedback" component={Feedback} />
+            <Stack.Screen name="FeedbackSuccess" component={FeedbackSuccess} />
+            <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+            <Stack.Screen name="explore" component={explore} />
+            <Stack.Screen name="explore2" component={explore2} />
+            {/* <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} /> */}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </LanguageProvider>
+    </I18nextProvider>
   );
 };
 

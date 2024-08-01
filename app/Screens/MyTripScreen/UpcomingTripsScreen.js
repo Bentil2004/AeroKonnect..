@@ -3,10 +3,12 @@ import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Tex
 import { FontAwesome5 } from '@expo/vector-icons';
 import CustomButton from '../../components/CustomButton';
 import UpcomingTrips from '../MyTripScreen/UpcomingTrip';
+import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
 
 const UpcomingTripsScreen = ({ navigation }) => {
+  const { t } = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [reservationCode, setReservationCode] = useState('');
   const [surname, setSurname] = useState('');
@@ -45,32 +47,32 @@ const UpcomingTripsScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-      <Text style={styles.text}>MY TRIP</Text>
+      <Text style={styles.text}>{t('MY TRIP')}</Text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('MyTripScreen')}
         >
-          <Text style={[styles.buttonText, styles.selectedText]}>Past</Text>
+          <Text style={[styles.buttonText, styles.selectedText]}>{t('Past')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.selectedButton]}
         >
-          <Text style={styles.buttonText}>Upcoming</Text>
+          <Text style={styles.buttonText}>{t('Upcoming')}</Text>
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <UpcomingTrips trips={upcomingTrips} handleDeleteTrip={handleDeleteTrip} navigation={navigation} />
         <View style={styles.bookNowButtonContainer}>
           <CustomButton 
-            text="Book Now"
+            text={t("Book Now")}
             bg={"#00527e"}
             fontSize="bold"
             txt={"white"}
             onPress={Home}
           />
           <CustomButton 
-            text="Add a trip"
+            text={t("Add a trip")}
             bg={"white"}
             fontSize="bold"
             txt={"#00527E"}
@@ -86,21 +88,21 @@ const UpcomingTripsScreen = ({ navigation }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Add a reservation code</Text>
+            <Text style={styles.modalTitle}>{t('Add a reservation code')}</Text>
             <TextInput
               style={styles.input}
-              placeholder="Booking code"
+              placeholder={t('Booking code')}
               value={reservationCode}
               onChangeText={setReservationCode}
             />
             <TextInput
               style={styles.input}
-              placeholder="Surname"
+              placeholder={t('Surname')}
               value={surname}
               onChangeText={setSurname}
             />
             <CustomButton 
-              text="Add trip"
+              text={t("Add trip")}
               bg={"#00527e"}
               fontSize="bold"
               txt={"white"}
@@ -108,7 +110,7 @@ const UpcomingTripsScreen = ({ navigation }) => {
               style={styles.modalButton}
             />
             <CustomButton 
-              text="Cancel"
+              text={t("Cancel")}
               bg={"white"}
               fontSize="bold"
               txt={"#00527E"}
@@ -175,8 +177,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     top: 100,
     paddingBottom: 200
-    
-
   },
   modalContainer: {
     flex: 1,
