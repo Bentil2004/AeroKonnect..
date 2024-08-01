@@ -14,9 +14,11 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from 'react-i18next';
 
 const AIChatScreen = () => {
   const navigation = useNavigation();
+  const { t } = useTranslation(); // Initialize translation
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -50,7 +52,6 @@ const AIChatScreen = () => {
     try {
       const response = await fetch(url, options);
       const result = await response.json();
-      console.log(result);
       return result;
     } catch (error) {
       console.error(error);
@@ -74,11 +75,9 @@ const AIChatScreen = () => {
     try {
       const response = await query(inputMessage);
 
-      console.log("API Response:", response.result);
-
       const aiMessage = {
         id: Date.now().toString(),
-        text: response?.result || "No response text found",
+        text: response?.result || t("No response text found"),
         sender: "ai",
         time: new Date().toLocaleTimeString(),
       };
@@ -87,7 +86,7 @@ const AIChatScreen = () => {
       console.error("Error fetching AI response:", error);
       const errorMessage = {
         id: Date.now().toString(),
-        text: "Sorry, I couldn't fetch a response. Please try again.",
+        text: t("Sorry, I couldn't fetch a response. Please try again."),
         sender: "ai",
         time: new Date().toLocaleTimeString(),
       };
@@ -128,7 +127,7 @@ const AIChatScreen = () => {
           source={require("../../assets/aiassistant.png")}
           style={styles.aiImage}
         />
-        <Text style={styles.headerTitle}>AI Assistant</Text>
+        <Text style={styles.headerTitle}>{t('AI Assistant')}</Text>
       </View>
 
       <FlatList
@@ -151,7 +150,7 @@ const AIChatScreen = () => {
       <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Send a message"
+          placeholder={t("Send a message")}
           value={inputMessage}
           onChangeText={setInputMessage}
           onSubmitEditing={sendMessage}
@@ -163,7 +162,6 @@ const AIChatScreen = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

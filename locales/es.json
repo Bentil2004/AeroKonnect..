@@ -43,7 +43,22 @@
                 
                     "Sign up": "Regístrate",
                     "to view your trip": "para ver tu viaje",
-                    "No trip available": "No hay viajes disponibles"
+                    "No trip available": "No hay viajes disponibles",
+                    "Language": "Idioma",
+                    "AI Assistant": "Asistente de IA",
+                    "Send a message": "Enviar un mensaje",
+                    
+                        "Booking Reference": "Referencia de reserva",
+                        "Ticketed": "Con billete",
+                        "Not Ticketed": "Sin billete",
+                        "AIChatScreen": {
+                            "WelcomeMessage": "¡Bienvenido al chat de IA!",
+                            "Prompt": "Pregunta lo que quieras",
+                            "SendButton": "Enviar",
+                            "NoResponse": "Sin respuesta de la IA"
+                          }
+                      
+                      
                   
                   
               

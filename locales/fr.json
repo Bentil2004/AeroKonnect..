@@ -38,7 +38,24 @@
             "Add a reservation code": "Ajouter un code de réservation",
             "Booking code": "Code de réservation",
             "Surname": "Nom de famille",
-            "Cancel": "Annuler"
+            "Cancel": "Annuler",
+            "Language": "Langue",
+            
+                "No trip available": "Aucun voyage disponible",
+                "Booking Reference": "Référence de réservation",
+                "Ticketed": "Billet émis",
+                "Not Ticketed": "Sans billet",
+                "AI Assistant": "Assistant IA",
+                "Send a message": "Envoyer un message",
+      
+                
+                    "AIChatScreen": {
+                      "WelcomeMessage": "Bienvenue dans le chat IA !",
+                      "Prompt": "Demandez-moi n'importe quoi",
+                      "SendButton": "Envoyer",
+                      "NoResponse": "Pas de réponse de l'IA"
+                    }
+                  
           
           
       

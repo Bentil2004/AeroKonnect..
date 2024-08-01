@@ -38,8 +38,23 @@
         "Add a reservation code": "أضف رمز الحجز",
         "Booking code": "رمز الحجز",
         "Surname": "اللقب",
-        "Cancel": "إلغاء"
+        "Cancel": "إلغاء",
+        "Language": "اللغة",
+          "No trip available": "لا توجد رحلة متاحة",
+          "Booking Reference": "مرجع الحجز",
+          "Ticketed": "تذاكر صادرة",
+          "Not Ticketed": "لم تصدر تذاكر",
+          "AI Assistant": " مساعد الذكاء الاصطناعي",
+          "Send a message":" إرسال رسالة",
+          "AIChatScreen": {
+            "WelcomeMessage": "مرحبًا بك في الدردشة الذكية!",
+            "Prompt": "اسألني أي شيء",
+            "SendButton": "إرسال",
+            "NoResponse": "لا توجد استجابة من الذكاء الاصطناعي"
+          }
+      
         
+     
       
       
     

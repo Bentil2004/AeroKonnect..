@@ -1,21 +1,24 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 
 const UpcomingTrips = ({ trips, handleDeleteTrip, navigation }) => {
+  const { t } = useTranslation(); // Initialize translation
+
   return (
     <View style={styles.tripsContainer}>
       {trips.length === 0 ? (
         <View style={styles.noFlightContainer}>
           <FontAwesome5 name="plane-slash" size={100} color="#00527E" />
-          <Text style={styles.noFlightText}>No trip available</Text>
+          <Text style={styles.noFlightText}>{t('No trip available')}</Text>
         </View>
       ) : (
         trips.map((trip, index) => (
           <View key={index} style={styles.tripCard}>
             <View style={styles.firstline}>
               <Text style={styles.confirmation}>
-                Booking Reference {trip.reservationCode}
+                {t('Booking Reference')} {trip.reservationCode}
               </Text>
               <TouchableOpacity
                 onPress={() => navigation.navigate('TripDetails', { trip })}
@@ -48,7 +51,7 @@ const UpcomingTrips = ({ trips, handleDeleteTrip, navigation }) => {
                   trip.ticketed ? null : styles.notTicketed,
                 ]}
               >
-                {trip.ticketed ? "Ticketed" : "Not Ticketed"}
+                {trip.ticketed ? t('Ticketed') : t('Not Ticketed')}
               </Text>
               <TouchableOpacity
                 style={styles.deleteButton}

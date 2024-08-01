@@ -12,7 +12,7 @@ const SettingsScreen = ({ navigation }) => {
         <Text style={styles.headerText}>{t('Settings')}</Text>
       </View>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CountryLanguageSearch')}>
-        <Text style={styles.buttonText}>{t('Country & language')}</Text>
+        <Text style={styles.buttonText}>{t('Language')}</Text>
         <Text style={styles.arrow}>→</Text>
       </TouchableOpacity>
       <Text style={styles.appVersion}>{t('App Version 0.00')}</Text>
