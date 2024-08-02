@@ -2,28 +2,38 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
+import i18next from '../../../services/i18next';
+import { useLanguage } from '../../../LanguageProvider'; 
 
 const Feedback = ({ navigation }) => {
+  const { language, switchLanguage } = useLanguage();
   const [selectedAspect, setSelectedAspect] = useState(null);
   const [comment, setComment] = useState('');
   const [email, setEmail] = useState('');
   const [rating, setRating] = useState(0);
+  const { t } = useTranslation(); 
 
   const handleRating = (value) => {
     setRating(rating === value ? 0 : value);
   };
 
+  const changeLanguage = (newLanguage) => {
+    switchLanguage(newLanguage);
+    i18next.changeLanguage(newLanguage);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Feedback</Text>
+        <Text style={styles.title}>{t('Feedback')}</Text>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.instructions}>
-          Your feedback is important to us! Help us improve your experience by sharing your thoughts and suggestions.
+          {t('Your feedback is important to us! Help us improve your experience by sharing your thoughts and suggestions.')}
         </Text>
 
-        <Text style={styles.label}>Rate our app</Text>
+        <Text style={styles.label}>{t('Rate our app')}</Text>
         <AirbnbRating
           count={5}
           reviews={[]}
@@ -32,7 +42,7 @@ const Feedback = ({ navigation }) => {
           onFinishRating={handleRating}
         />
 
-        <Text style={styles.label}>What aspect of our service would you like to give feedback on? (Select one)</Text>
+        <Text style={styles.label}>{t('What aspect of our service would you like to give feedback on? (Select one)')}</Text>
         {['Booking Experience', 'Flight Experience', 'Customer Service', 'App Usability', 'Other'].map((aspect) => (
           <TouchableOpacity
             key={aspect}
@@ -44,30 +54,32 @@ const Feedback = ({ navigation }) => {
           </TouchableOpacity>
         ))}
 
-        <Text style={styles.label}>Your Comment:</Text>
+        <Text style={styles.label}>{t('Your Comment:')}</Text>
         <TextInput
           style={styles.textInput}
           multiline
-          placeholder="Please tell us more about your experience"
+          placeholder={t('Please tell us more about your experience')}
           value={comment}
           onChangeText={setComment}
         />
 
-        <Text style={styles.label}>Contact Information (Optional)</Text>
+        <Text style={styles.label}>{t('Contact Information (Optional)')}</Text>
         <TextInput
           style={styles.textContact}
-          placeholder="If you would like us to follow up with you,please leave your email address"
+          placeholder={t('If you would like us to follow up with you, please leave your email address')}
           value={email}
           onChangeText={setEmail}
         />
 
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FeedbackSuccess')}>
-          <Text style={styles.buttonText}>Submit Feedback</Text>
+          <Text style={styles.buttonText}>{t('Submit Feedback')}</Text>
         </TouchableOpacity>
 
         <Text style={styles.footerText}>
-          Your feedback is anonymous and will be used solely to improve our services.
+          {t('Your feedback is anonymous and will be used solely to improve our services.')}
         </Text>
+
+  
       </ScrollView>
     </SafeAreaView>
   );
@@ -95,13 +107,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontWeight: 'bold',
-    paddingTop:30,
+    paddingTop: 30,
     color: '#fff',
     textAlign: 'center',
   },
   scrollContainer: {
     padding: 20,
-    paddingTop: 120, 
+    paddingTop: 120,
   },
   instructions: {
     fontSize: 16,
@@ -175,6 +187,17 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 20,
     textAlign: 'center',
+  },
+  languageButton: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 5,
+    alignItems: 'center',
+  },
+  languageButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 

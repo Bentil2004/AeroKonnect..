@@ -1,4 +1,178 @@
-import React, { useState, useEffect, useRef } from "react";
+// import React, { useState, useEffect, useRef } from "react";
+// import {
+//   StyleSheet,
+//   Text,
+//   View,
+//   SafeAreaView,
+//   Dimensions,
+//   TouchableOpacity,
+//   FlatList,
+//   Image,
+//   Animated,
+// } from "react-native";
+// import { MaterialCommunityIcons } from "@expo/vector-icons";
+// import CustomInput from "../../components/CustomInput";
+// import { useNavigation } from "@react-navigation/native";
+// import {
+//   GestureHandlerRootView,
+// } from "react-native-gesture-handler";
+// import { useTranslation } from 'react-i18next';
+// import { createClient } from "@supabase/supabase-js";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// const { height } = Dimensions.get("window");
+
+// const supabaseUrl = "https://ucusngylouypldsoltnd.supabase.co";
+// const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdXNuZ3lsb3V5cGxkc29sdG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcyNjgxMDksImV4cCI6MjAzMjg0NDEwOX0.cQlMeHLv1Dd6gksfz0lO6Sd3asYfgXZrkRuCxIMnwqw";
+// const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+//   auth: {
+//     storage: AsyncStorage,
+//     autoRefreshToken: true,
+//     persistSession: true,
+//     detectSessionInUrl: false,
+//   },
+// });
+
+// const HomeScreen = () => {
+//   const navigation = useNavigation();
+//   const [likedItems, setLikedItems] = useState({});
+//   const [searchQuery, setSearchQuery] = useState("Accra");
+//   const [filteredData, setFilteredData] = useState(null);
+//   const [userDetails, setUserDetails] = useState(null);  // State to hold user details
+
+//   const { t } = useTranslation();
+
+//   const scrollY = useRef(new Animated.Value(0)).current;
+
+//   const onBellOutlinePressed = () => {
+//     navigation.navigate("Notification");
+//   };
+
+//   useEffect(() => {
+//     const fetchUserDetails = async () => {
+//       const userId = await AsyncStorage.getItem("userId");
+//       if (!userId) return;
+
+//       const { data, error } = await supabase
+//         .from("users")
+//         .select("fname, lname, phonenumber, birthdate, nationality")
+//         .eq("authid", userId)
+//         .single();
+
+//       if (error) {
+//         console.log(error);
+//         return;
+//       }
+
+//       setUserDetails(data);
+//     };
+
+//     fetchUserDetails();
+//     handleSearch();
+//   }, []);
+
+//   const [location, setLocation] = useState({
+//     latitude: 37.78825,
+//     longitude: -122.4324,
+//   });
+//   const [search, setSearch] = useState("Miami");
+//   const [placeDetails, setPlaceDetails] = useState([]);
+
+//   const handleSearch = async () => {
+//     console.log(search);
+//     const geocodeUrl = `https://google-maps-geocoding.p.rapidapi.com/geocode/json?address=${encodeURIComponent(search)}&language=en`;
+//     const geocodeOptions = {
+//       method: 'GET',
+//       headers: {
+//         'x-rapidapi-key': '8d96448f6cmsh6976762dedf920ap10a7afjsn1d21cf7179c8',
+//         'x-rapidapi-host': 'google-maps-geocoding.p.rapidapi.com'
+//       }
+//     };
+
+//     try {
+//       const geocodeResponse = await fetch(geocodeUrl, geocodeOptions);
+//       const geocodeResult = await geocodeResponse.json();
+//       console.log('Geocode Result:', geocodeResult);
+
+//       if (geocodeResult.results && geocodeResult.results.length > 0) {
+//         const location = geocodeResult.results[0].geometry.location;
+//         setLocation({
+//           latitude: location.lat,
+//           longitude: location.lng,
+//         });
+
+//         const placeDetails = await fetchPlaceDetails(location.lat, location.lng);
+//         setPlaceDetails(placeDetails);
+//       } else {
+//         console.warn('No results found');
+//       }
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+
+//   const fetchPlaceDetails = async (lat, lng) => {
+//     const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&key=AIzaSyCLkvlVymR7LU-xm61NjaWDFHtUjT9f5cs`;
+
+//     try {
+//       const placesResponse = await fetch(placesUrl);
+//       const placesResult = await placesResponse.json();
+//       console.log('Places Result:', placesResult);
+
+//       if (placesResult.results && placesResult.results.length > 0) {
+//         const topPlaces = placesResult.results.slice(0, 4);
+//         const placeDetailsPromises = topPlaces.map(async (place) => {
+//           const photoUrl = place.photos
+//             ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=AIzaSyCLkvlVymR7LU-xm61NjaWDFHtUjT9f5cs`
+//             : null;
+
+//           return {
+//             id: place.place_id,
+//             name: place.name,
+//             address: place.vicinity,
+//             photoUrl,
+//             description: place.types.join(', '),
+//             price: (Math.random() * 1000).toFixed(3),
+//             images: [photoUrl, photoUrl, photoUrl],
+//             todo: [{ title: "Activity", description: place.types.join(', '), image: photoUrl }],
+//           };
+//         });
+
+//         const resolvedPlaceDetails = await Promise.all(placeDetailsPromises);
+//         console.log('Resolved Place Details:', resolvedPlaceDetails);
+//         return resolvedPlaceDetails;
+//       } else {
+//         return [];
+//       }
+//     } catch (error) {
+//       console.error(error);
+//       return [];
+//     }
+//   };
+
+//   const renderItem = ({ item }) => (
+//     <TouchableOpacity onPress={() => navigation.navigate('PopularDestination', { destination: item })}>
+//       <View style={styles.placeContainer}>
+//         <Text style={styles.placeName} numberOfLines={1}>{item.name}</Text>
+//         <Text style={styles.placeAddress} numberOfLines={1}>{item.address}</Text>
+//         {item.photoUrl ? (
+//           <Image source={{ uri: item.photoUrl }} style={styles.placeImage} />
+//         ) : (
+//           <Text>{t('No Image Available')}</Text>
+//         )}
+//       </View>
+//     </TouchableOpacity>
+//   );
+
+//   const navigateToChatScreen = () => {
+//     navigation.navigate("AIChat");
+//   };
+
+//   const Book = function () {
+//     navigation.navigate("Oneway");
+//   };
+
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,38 +187,32 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CustomInput from "../../components/CustomInput";
 import { useNavigation } from "@react-navigation/native";
-import {
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
-import { useTranslation } from 'react-i18next';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useTranslation } from "react-i18next";
+import { createClient } from "@supabase/supabase-js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { debounce } from "lodash";
 
 const { height } = Dimensions.get("window");
+
+const supabaseUrl = "https://ucusngylouypldsoltnd.supabase.co";
+const supabaseAnonKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdXNuZ3lsb3V5cGxkc29sdG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcyNjgxMDksImV4cCI6MjAzMjg0NDEwOX0.cQlMeHLv1Dd6gksfz0lO6Sd3asYfgXZrkRuCxIMnwqw";
+const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    storage: AsyncStorage,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
+  },
+});
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [likedItems, setLikedItems] = useState({});
   const [searchQuery, setSearchQuery] = useState("Accra");
   const [filteredData, setFilteredData] = useState(null);
-
-  const { t } = useTranslation();
-
-  const scrollY = useRef(new Animated.Value(0)).current;
-
-  const onBellOutlinePressed = () => {
-    navigation.navigate("Notification");
-  };
-
-  // const handleDoubleTap = (id) => {
-  //   setLikedItems((prevLikedItems) => ({
-  //     ...prevLikedItems,
-  //     [id]: !prevLikedItems[id],
-  //   }));
-  // };
-
-  useEffect(() => {
-    handleSearch();
-  }, []);
-
+  const [userDetails, setUserDetails] = useState(null);
   const [location, setLocation] = useState({
     latitude: 37.78825,
     longitude: -122.4324,
@@ -52,46 +220,80 @@ const HomeScreen = () => {
   const [search, setSearch] = useState("Miami");
   const [placeDetails, setPlaceDetails] = useState([]);
 
-  const handleSearch = async () => {
-    console.log(search);
-    const geocodeUrl = `https://google-maps-geocoding.p.rapidapi.com/geocode/json?address=${encodeURIComponent(search)}&language=en`;
-    const geocodeOptions = {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': '8d96448f6cmsh6976762dedf920ap10a7afjsn1d21cf7179c8',
-        'x-rapidapi-host': 'google-maps-geocoding.p.rapidapi.com'
-      }
-    };
+  const { t } = useTranslation();
+  const scrollY = useRef(new Animated.Value(0)).current;
 
-    try {
-      const geocodeResponse = await fetch(geocodeUrl, geocodeOptions);
-      const geocodeResult = await geocodeResponse.json();
-      console.log('Geocode Result:', geocodeResult);
-
-      if (geocodeResult.results && geocodeResult.results.length > 0) {
-        const location = geocodeResult.results[0].geometry.location;
-        setLocation({
-          latitude: location.lat,
-          longitude: location.lng,
-        });
-
-        const placeDetails = await fetchPlaceDetails(location.lat, location.lng);
-        setPlaceDetails(placeDetails);
-      } else {
-        console.warn('No results found');
-      }
-    } catch (error) {
-      console.error(error);
-    }
+  const onBellOutlinePressed = () => {
+    navigation.navigate("Notification");
   };
 
-  const fetchPlaceDetails = async (lat, lng) => {
+  const fetchUserDetails = useCallback(async () => {
+    const userId = await AsyncStorage.getItem("userId");
+    if (!userId) return;
+
+    const { data, error } = await supabase
+      .from("users")
+      .select("fname, lname, phonenumber, birthdate, nationality")
+      .eq("authid", userId)
+      .single();
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    setUserDetails(data);
+  }, []);
+
+  const handleSearch = useCallback(
+    debounce(async () => {
+      console.log(search);
+      const geocodeUrl = `https://google-maps-geocoding.p.rapidapi.com/geocode/json?address=${encodeURIComponent(
+        search
+      )}&language=en`;
+      const geocodeOptions = {
+        method: "GET",
+        headers: {
+          "x-rapidapi-key":
+            "8d96448f6cmsh6976762dedf920ap10a7afjsn1d21cf7179c8",
+          "x-rapidapi-host": "google-maps-geocoding.p.rapidapi.com",
+        },
+      };
+
+      try {
+        const geocodeResponse = await fetch(geocodeUrl, geocodeOptions);
+        const geocodeResult = await geocodeResponse.json();
+        console.log("Geocode Result:", geocodeResult);
+
+        if (geocodeResult.results && geocodeResult.results.length > 0) {
+          const location = geocodeResult.results[0].geometry.location;
+          setLocation({
+            latitude: location.lat,
+            longitude: location.lng,
+          });
+
+          const placeDetails = await fetchPlaceDetails(
+            location.lat,
+            location.lng
+          );
+          setPlaceDetails(placeDetails);
+        } else {
+          console.warn("No results found");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }, 500),
+    [search]
+  );
+
+  const fetchPlaceDetails = useCallback(async (lat, lng) => {
     const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&key=AIzaSyCLkvlVymR7LU-xm61NjaWDFHtUjT9f5cs`;
 
     try {
       const placesResponse = await fetch(placesUrl);
       const placesResult = await placesResponse.json();
-      console.log('Places Result:', placesResult);
+      console.log("Places Result:", placesResult);
 
       if (placesResult.results && placesResult.results.length > 0) {
         const topPlaces = placesResult.results.slice(0, 4);
@@ -105,15 +307,21 @@ const HomeScreen = () => {
             name: place.name,
             address: place.vicinity,
             photoUrl,
-            description: place.types.join(', '),
+            description: place.types.join(", "),
             price: (Math.random() * 1000).toFixed(3),
             images: [photoUrl, photoUrl, photoUrl],
-            todo: [{ title: "Activity", description: place.types.join(', '), image: photoUrl }],
+            todo: [
+              {
+                title: "Activity",
+                description: place.types.join(", "),
+                image: photoUrl,
+              },
+            ],
           };
         });
 
         const resolvedPlaceDetails = await Promise.all(placeDetailsPromises);
-        console.log('Resolved Place Details:', resolvedPlaceDetails);
+        console.log("Resolved Place Details:", resolvedPlaceDetails);
         return resolvedPlaceDetails;
       } else {
         return [];
@@ -122,17 +330,25 @@ const HomeScreen = () => {
       console.error(error);
       return [];
     }
-  };
+  }, []);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('PopularDestination', { destination: item })}>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("PopularDestination", { destination: item })
+      }
+    >
       <View style={styles.placeContainer}>
-        <Text style={styles.placeName} numberOfLines={1}>{item.name}</Text>
-        <Text style={styles.placeAddress} numberOfLines={1}>{item.address}</Text>
+        <Text style={styles.placeName} numberOfLines={1}>
+          {item.name}
+        </Text>
+        <Text style={styles.placeAddress} numberOfLines={1}>
+          {item.address}
+        </Text>
         {item.photoUrl ? (
           <Image source={{ uri: item.photoUrl }} style={styles.placeImage} />
         ) : (
-          <Text>{t('No Image Available')}</Text>
+          <Text>{t("No Image Available")}</Text>
         )}
       </View>
     </TouchableOpacity>
@@ -142,17 +358,36 @@ const HomeScreen = () => {
     navigation.navigate("AIChat");
   };
 
-  const Book = function () {
+  const Book = () => {
     navigation.navigate("Oneway");
   };
+
+  useEffect(() => {
+    fetchUserDetails();
+    handleSearch();
+  }, [fetchUserDetails, handleSearch]);
+
+
+  useEffect(() => {
+    fetchUserDetails();
+    const focusListener = navigation.addListener('focus', () => {
+      fetchUserDetails();
+    });
+
+    return () => {
+      navigation.removeListener('focus', focusListener);
+    };
+  }, [fetchUserDetails, navigation]);
+
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.Text}>
-            {t('Good Morning')}, Ama{"\n"}
-            <Text style={styles.text}>{t('Where are you going?')}</Text>
+            {t("Good Morning")}, {userDetails?.fname || "User"}
+            {"\n"}
+            <Text style={styles.text}>{t("Where are you going?")}</Text>
           </Text>
           <TouchableOpacity onPress={onBellOutlinePressed}>
             <MaterialCommunityIcons
@@ -165,7 +400,7 @@ const HomeScreen = () => {
 
         <View style={styles.inputContainer}>
           <CustomInput
-            placeholder={t('Search for your next destination')}
+            placeholder={t("Search for your next destination")}
             bordercolor="#7D7D7D"
             borderRadius="7"
             iconName="search"
@@ -176,13 +411,11 @@ const HomeScreen = () => {
                 color="#7D7D7D"
               />
             }
-            onChangeText={
-              (val) => {
-                setSearch(val);
-                handleSearch();
-                console.log(val);
-              }
-            }
+            onChangeText={(val) => {
+              setSearch(val);
+              handleSearch();
+              console.log(val);
+            }}
           />
         </View>
 
@@ -192,7 +425,9 @@ const HomeScreen = () => {
               source={require("../../assets/images/inclined.png")}
               style={styles.bookFlightButtonImage}
             />
-            <Text style={styles.bookFlightButtonText}>{t('Book a flight')}</Text>
+            <Text style={styles.bookFlightButtonText}>
+              {t("Book a flight")}
+            </Text>
           </View>
         </TouchableOpacity>
 
@@ -204,7 +439,7 @@ const HomeScreen = () => {
           )}
           scrollEventThrottle={16}
         >
-          <Text style={styles.sectionTitle}>{t('Popular Destinations')}</Text>
+          <Text style={styles.sectionTitle}>{t("Popular Destinations")}</Text>
           <FlatList
             data={placeDetails}
             horizontal={true}
@@ -213,9 +448,11 @@ const HomeScreen = () => {
             contentContainerStyle={styles.flatListContainer}
           />
 
-          <Text style={styles.sectionTitle}>{t('Good Deals Just For You')}</Text>
+          <Text style={styles.sectionTitle}>
+            {t("Good Deals Just For You")}
+          </Text>
           <Text style={styles.writing}>
-            {t('Save 20% on Flights to Europe! Book your summer getaway now')}
+            {t("Save 20% on Flights to Europe! Book your summer getaway now")}
           </Text>
           <FlatList
             data={placeDetails}
@@ -225,9 +462,11 @@ const HomeScreen = () => {
             contentContainerStyle={styles.flatListContainer}
           />
 
-          <Text style={styles.sectionTitle}>{t('Trip Inscription')}</Text>
+          <Text style={styles.sectionTitle}>{t("Trip Inscription")}</Text>
           <Text style={styles.writing}>
-            {t('Experience the world through new cultures and breathtaking landscapes.')}
+            {t(
+              "Experience the world through new cultures and breathtaking landscapes."
+            )}
           </Text>
           <FlatList
             data={placeDetails}
@@ -237,9 +476,11 @@ const HomeScreen = () => {
             contentContainerStyle={styles.flatListContainer}
           />
 
-          <Text style={styles.sectionTitle}>{t('Trip Inscription')}</Text>
+          <Text style={styles.sectionTitle}>{t("Trip Inscription")}</Text>
           <Text style={styles.writing}>
-            {t('Experience the world through new cultures and breathtaking landscapes.')}
+            {t(
+              "Experience the world through new cultures and breathtaking landscapes."
+            )}
           </Text>
           <FlatList
             data={placeDetails}
@@ -249,9 +490,11 @@ const HomeScreen = () => {
             contentContainerStyle={styles.flatListContainer}
           />
 
-          <Text style={styles.sectionTitle}>{t('Trip Inscription')}</Text>
+          <Text style={styles.sectionTitle}>{t("Trip Inscription")}</Text>
           <Text style={styles.writing}>
-            {t('Experience the world through new cultures and breathtaking landscapes.')}
+            {t(
+              "Experience the world through new cultures and breathtaking landscapes."
+            )}
           </Text>
           <FlatList
             data={placeDetails}
@@ -261,7 +504,9 @@ const HomeScreen = () => {
             contentContainerStyle={styles.flatListContainer}
           />
 
-          <Text style={styles.sectionTitle}>{t('Recreational Sites Around the World')}</Text>
+          <Text style={styles.sectionTitle}>
+            {t("Recreational Sites Around the World")}
+          </Text>
           <FlatList
             data={placeDetails}
             horizontal={true}

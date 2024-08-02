@@ -19,9 +19,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
 import { useRoute } from "@react-navigation/native";
 
-
 const supabaseUrl = "https://ucusngylouypldsoltnd.supabase.co";
-const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdXNuZ3lsb3V5cGxkc29sdG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcyNjgxMDksImV4cCI6MjAzMjg0NDEwOX0.cQlMeHLv1Dd6gksfz0lO6Sd3asYfgXZrkRuCxIMnwqw";
+const supabaseAnonKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdXNuZ3lsb3V5cGxkc29sdG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcyNjgxMDksImV4cCI6MjAzMjg0NDEwOX0.cQlMeHLv1Dd6gksfz0lO6Sd3asYfgXZrkRuCxIMnwqw";
 const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage: AsyncStorage,
@@ -43,6 +43,10 @@ const SignUpDetailsScreen = ({ navigation }) => {
   const [regularUpdates, setRegularUpdates] = useState(false);
   const [nationality, setNationality] = useState("");
 
+  const setUserId = async (userId) => {
+    await AsyncStorage.setItem("userId", userId);
+  };
+
   const firstNameInputRef = useRef(null);
   const { userId } = useRoute().params;
 
@@ -57,10 +61,20 @@ const SignUpDetailsScreen = ({ navigation }) => {
   };
 
   const handleAerokonnectUserSubmit = async () => {
-    if (!firstName || !lastName || !formattedValue || !nationality || !acceptTerms) {
-      Alert.alert("Error", "Please fill all fields and accept the Terms and Conditions.");
+    if (
+      !firstName ||
+      !lastName ||
+      !formattedValue ||
+      !nationality ||
+      !acceptTerms
+    ) {
+      Alert.alert(
+        "Error",
+        "Please fill all fields and accept the Terms and Conditions."
+      );
       return;
     }
+    setUserId(userId);
 
     setLoading(true);
 
@@ -216,7 +230,9 @@ const SignUpDetailsScreen = ({ navigation }) => {
             isChecked={acceptTerms}
             onClick={() => setAcceptTerms(!acceptTerms)}
           />
-          <Text style={styles.checkboxText}>I accept the Terms and Conditions.</Text>
+          <Text style={styles.checkboxText}>
+            I accept the Terms and Conditions.
+          </Text>
         </View>
 
         <View style={styles.checkboxContainer}>
@@ -231,7 +247,10 @@ const SignUpDetailsScreen = ({ navigation }) => {
         {loading ? (
           <ActivityIndicator size="small" color="#00527e" />
         ) : (
-          <TouchableOpacity style={styles.button} onPress={handleAerokonnectUserSubmit}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleAerokonnectUserSubmit}
+          >
             <Text style={styles.buttonText}>Next</Text>
           </TouchableOpacity>
         )}

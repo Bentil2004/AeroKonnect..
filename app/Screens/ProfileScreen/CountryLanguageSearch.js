@@ -1,51 +1,39 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Modal, FlatList, TouchableOpacity, Button } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { useTranslation } from 'react-i18next';
 import i18next from '../../../services/i18next';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { languageResources } from '../../../services/i18next';
 import languageList from '../../../services/languagesList.json';
 import { useLanguage } from '../../../LanguageProvider'; 
 
 const CountryLanguageSearch = () => {
   const { language, switchLanguage } = useLanguage();
-  const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState(language);
   const { t } = useTranslation(); 
   const [visible, setVisible] = useState(false);
 
-  const changeLanguage = (lang) => {
-    switchLanguage(lang);
-    i18next.changeLanguage(lang);
+  const changeLanguage = () => {
+    switchLanguage(selectedLanguage);
+    i18next.changeLanguage(selectedLanguage);
     setVisible(false);
   };
-
-  const countries = [
-    { label: 'United States', value: 'US' },
-    { label: 'Canada', value: 'CA' },
-    { label: 'United Kingdom', value: 'GB' },
-    { label: 'France', value: 'FR' },
-    { label: 'Germany', value: 'DE' },
-    { label: 'Japan', value: 'JP' }
-  ];
 
   const languages = [
     { label: 'English', value: 'en' },
     { label: 'Spanish', value: 'es' },
-   { label: 'French', value: 'fr' },
-   { label: 'Arabic', value: 'ar' }
-   
+    { label: 'French', value: 'fr' },
+    { label: 'Arabic', value: 'ar' },
+    { label: 'German', value: 'de'}
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Modal visible={visible} onRequestClose={() => setVisible(false)}>
         <View style={styles.modalContainer}>
           <FlatList
-            data={Object.keys(languageResources)}
+            data={Object.keys(languageList)}
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.languageButton} onPress={() => changeLanguage(item)}>
+              <TouchableOpacity style={styles.languageButton} onPress={() => setSelectedLanguage(item)}>
                 <Text style={styles.languageName}>{languageList[item].name}</Text>
               </TouchableOpacity>
             )}
@@ -54,30 +42,24 @@ const CountryLanguageSearch = () => {
         </View>
       </Modal>
       <View style={styles.header}>
-        <Text style={styles.headerText}>{t('Countries and Languages')}</Text>
+        <Text style={styles.headerText}>{t('Select Language')}</Text>
       </View>
       <View style={styles.body}>
         <View style={styles.pickerContainer}>
-          <Text style={styles.pickerLabel}>{t('Select Country')}</Text>
-          <RNPickerSelect
-            onValueChange={(value) => setSelectedCountry(value)}
-            items={countries}
-            placeholder={{ label: '', value: null }}
-            style={pickerSelectStyles}
-          />
-        </View>
-        <View style={styles.pickerContainer}>
           <Text style={styles.pickerLabel}>{t('Select Language')}</Text>
           <RNPickerSelect
-            onValueChange={(value) => changeLanguage(value)}
+            onValueChange={(value) => setSelectedLanguage(value)}
             items={languages}
             placeholder={{ label: '', value: null }}
             style={pickerSelectStyles}
             value={selectedLanguage}
           />
         </View>
+        <TouchableOpacity style={styles.button} onPress={changeLanguage}>
+          <Text style={styles.buttonText}>{t('Change Language')}</Text>
+        </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -110,6 +92,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#005f80',
     marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#005f80',
+    padding: 15,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    textAlign: 'center',
   },
   modalContainer: {
     flex: 1,

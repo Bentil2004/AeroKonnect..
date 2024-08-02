@@ -7,6 +7,8 @@ import { useNavigation } from "@react-navigation/native";
 const CompletionScreen = () => {
   const navigation = useNavigation();
 
+
+
   const onLogInPressed = () => {
     navigation.navigate("LogIn");
   };
@@ -21,7 +23,8 @@ const CompletionScreen = () => {
       />
 
       <Text style={styles.text}>
-        A verification link has been sent to your email address {`\n`}Proceed to verify your account and login.
+        A verification link has been sent to your email address {`\n`}Proceed to
+        verify your account and login.
       </Text>
 
       <CustomButton

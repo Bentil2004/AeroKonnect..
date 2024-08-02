@@ -1,9 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { SafeAreaView, View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Clipboard, Alert } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
+import { createClient } from "@supabase/supabase-js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const supabaseUrl = "https://ucusngylouypldsoltnd.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdXNuZ3lsb3V5cGxkc29sdG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcyNjgxMDksImV4cCI6MjAzMjg0NDEwOX0.cQlMeHLv1Dd6gksfz0lO6Sd3asYfgXZrkRuCxIMnwqw";
+const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    storage: AsyncStorage,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
+  },
+});
 
 const TripDetails = () => {
   const [isPassengerDetailsVisible, setIsPassengerDetailsVisible] = useState(false);
@@ -12,7 +25,38 @@ const TripDetails = () => {
   const [isPriceDetailsVisible, setIsPriceDetailsVisible] = useState(false);
   const [priceAnimatedHeight] = useState(new Animated.Value(0));
   
+  const [userDetails, setUserDetails] = useState({}); // Added userDetails state
+
   const navigation = useNavigation();
+
+  const fetchUserDetails = useCallback(async () => {
+    const userId = await AsyncStorage.getItem("userId");
+    if (!userId) return;
+
+    const { data, error } = await supabase
+      .from("users")
+      .select("fname, lname, phonenumber, birthdate, nationality")
+      .eq("authid", userId)
+      .single();
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    setUserDetails(data || {});
+  }, []);
+
+  useEffect(() => {
+    fetchUserDetails();
+    const focusListener = navigation.addListener('focus', () => {
+      fetchUserDetails();
+    });
+
+    return () => {
+      navigation.removeListener('focus', focusListener);
+    };
+  }, [fetchUserDetails, navigation]);
 
   const trip = {
     departureAirportCode: "KUM",
@@ -66,20 +110,18 @@ const TripDetails = () => {
     Alert.alert("Copied to Clipboard", text);
   };
 
-
   const onDonePressed = () => {
     navigation.navigate('BottomTab', {
       screen: 'My Trip'
     });
   };
 
-
   return (
     <View style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <LinearGradient style={styles.overlay} colors={['#00527E', '#83B4FD']}>
           <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
               <Ionicons name="chevron-back" size={24} color="white" />
             </TouchableOpacity>
             <Text style={styles.bookingConfirmed}>Your booking is confirmed</Text>
@@ -141,7 +183,7 @@ const TripDetails = () => {
             <Animated.View style={{ height: passengerAnimatedHeight, overflow: "hidden" }}>
               <View>
                 <Text style={styles.detailText}>Passenger 1</Text>
-                <Text style={styles.detailText}>Name: {passenger.name}</Text>
+                <Text style={styles.detailText}>Name: {userDetails.fname} {userDetails.lname}</Text>
                 <Text style={styles.detailText}>Ticket Number: {passenger.ticketNumber}</Text>
                 <Text style={styles.detailText}>Seat: {passenger.seat}</Text>
               </View>

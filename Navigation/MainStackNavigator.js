@@ -75,10 +75,11 @@ const MainStackNavigator = () => {
             <Stack.Screen name="PhoneNumberVerification" component={PhoneNumberVerificationScreen} />
             <Stack.Screen name="AvailableFlight" component={AvailableFlight} />
             <Stack.Screen name="SignUpDetails" component={SignUpDetailsScreen} />
+            <Stack.Screen name="CompletionScreen" component={CompletionScreen} />
             <Stack.Screen name="PassengersDetails" component={PassengersDetails} />
             <Stack.Screen name="Map" component={Map} />
+          <Stack.Screen name="ConfirmationScreen" component={ConfirmationScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />
-            <Stack.Screen name="CompletionScreen" component={CompletionScreen} />
             <Stack.Screen name="PopularDestination" component={PopularDestination} />
             <Stack.Screen name="BottomTab" component={BottomTabNavigator} />
             <Stack.Screen name="NextWelcome" component={NextWelcomeScreen} />
@@ -110,8 +111,7 @@ const MainStackNavigator = () => {
             <Stack.Screen name="ToDo" component={ToDoScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="CountryLanguageSearch" component={CountryLanguageSearch} />
-            <Stack.Screen name="PaymentMethodsSeats" component={PaymentMethods} />
-            <Stack.Screen name="ConfirmationScreen" component={ConfirmationScreen} />
+            <Stack.Screen name="PaymentMethodsSeats" component={PaymentMethods} />            
             <Stack.Screen name="LegalInfo" component={LegalInfo} />
             <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
             <Stack.Screen name="Feedback" component={Feedback} />
