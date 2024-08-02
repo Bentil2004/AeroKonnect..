@@ -1,54 +1,102 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import EditDetails from './EditDetails';
+import React, { useState, useEffect, useCallback } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
+import { createClient } from "@supabase/supabase-js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const supabaseUrl = "https://ucusngylouypldsoltnd.supabase.co";
+const supabaseAnonKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdXNuZ3lsb3V5cGxkc29sdG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcyNjgxMDksImV4cCI6MjAzMjg0NDEwOX0.cQlMeHLv1Dd6gksfz0lO6Sd3asYfgXZrkRuCxIMnwqw";
+const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    storage: AsyncStorage,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
+  },
+});
 
 const ProfileDetails = ({ navigation }) => {
-  const onProfileDetailsPressed = () => {
-    navigation.navigate("ProfileDetails");
-  };
+  const [userDetails, setUserDetails] = useState({});
+
+  const fetchUserDetails = useCallback(async () => {
+    const userId = await AsyncStorage.getItem("userId");
+    if (!userId) return;
+
+    const { data, error } = await supabase
+      .from("users")
+      .select("fname, lname, phonenumber, birthdate, nationality")
+      .eq("authid", userId)
+      .single();
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    setUserDetails(data || {});
+  }, []);
+
+  useEffect(() => {
+    fetchUserDetails();
+    const focusListener = navigation.addListener('focus', () => {
+      fetchUserDetails();
+    });
+
+    return () => {
+      navigation.removeListener('focus', focusListener);
+    };
+  }, [fetchUserDetails, navigation]);
 
   return (
     <View style={styles.container}>
-       <LinearGradient style={styles.Testing} colors={['#00527E', '#83B4FD']}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="chevron-left" size={15} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.title}>Profile Details</Text>
-        <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate(EditDetails)}>
-          <Text style={styles.editText}>Edit</Text>
-          <Icon name="pencil" size={16} color="#fff" />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.profileContainer}>
-        <View style={styles.profilePicture}>
-          <Text style={styles.profileInitials}>AD</Text>
+      <LinearGradient style={styles.Testing} colors={["#00527E", "#83B4FD"]}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon name="chevron-left" size={15} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.title}>Profile Details</Text>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => navigation.navigate('EditDetails')}
+          >
+            <Text style={styles.editText}>Edit</Text>
+            <Icon name="pencil" size={16} color="#fff" />
+          </TouchableOpacity>
         </View>
-        <Text style={styles.greeting}>Hello, Ama</Text>
-      </View>
+
+        <View style={styles.profileContainer}>
+          <View style={styles.profilePicture}>
+            <Text style={styles.profileInitials}>
+              {userDetails.fname?.[0]}
+              {userDetails.lname?.[0]}
+            </Text>
+          </View>
+          <Text style={styles.greeting}>{userDetails.fname} {userDetails.lname}</Text>
+        </View>
       </LinearGradient>
-      
+
       <View style={styles.detailsContainer}>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>First Name: </Text> Ama
+          <Text style={styles.detailLabel}>First Name: </Text>
+          {userDetails.fname}
         </Text>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Last Name: </Text> Doe
+          <Text style={styles.detailLabel}>Last Name: </Text>
+          {userDetails.lname}
         </Text>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Date of Birth: </Text> 01/01/2000
+          <Text style={styles.detailLabel}>Date of Birth: </Text>
+          {userDetails.birthdate}
         </Text>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Phone Number: </Text> +233123456789
+          <Text style={styles.detailLabel}>Phone Number: </Text>
+          {userDetails.phonenumber}
         </Text>
         <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Nationality: </Text> Ghanaian
-        </Text>
-        <Text style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Email Address: </Text> Amaane91@email.com
+          <Text style={styles.detailLabel}>Nationality: </Text>
+          {userDetails.nationality}
         </Text>
       </View>
     </View>
@@ -58,23 +106,19 @@ const ProfileDetails = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //padding: 20,
     backgroundColor: "#E0E6ED",
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-   // backgroundColor: "#00527e",
     paddingHorizontal: 10,
     paddingVertical: 55,
-   // borderBottomLeftRadius: 30,
-    //borderBottomRightRadius: 30,
   },
-  Testing:{
-  borderBottomLeftRadius: 30,
-  borderBottomRightRadius: 30,
-  height: 463,
+  Testing: {
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    height: 463,
   },
   title: {
     fontSize: 24,
@@ -122,7 +166,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
     marginLeft: 25,
-    marginRight: 25
+    marginRight: 25,
   },
   detailItem: {
     fontSize: 16,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,10 +9,53 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+import { createClient } from "@supabase/supabase-js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const supabaseUrl = "https://ucusngylouypldsoltnd.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdXNuZ3lsb3V5cGxkc29sdG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcyNjgxMDksImV4cCI6MjAzMjg0NDEwOX0.cQlMeHLv1Dd6gksfz0lO6Sd3asYfgXZrkRuCxIMnwqw";
+const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    storage: AsyncStorage,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
+  },
+});
 
 const SeatSelection = ({ route }) => {
   const [selectedSeat, setSelectedSeat] = useState(null);
+  const [userDetails, setUserDetails] = useState({});
   const navigation = useNavigation();
+
+  const fetchUserDetails = useCallback(async () => {
+    const userId = await AsyncStorage.getItem("userId");
+    if (!userId) return;
+
+    const { data, error } = await supabase
+      .from("users")
+      .select("fname, lname, phonenumber, birthdate, nationality")
+      .eq("authid", userId)
+      .single();
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    setUserDetails(data || {});
+  }, []);
+
+  useEffect(() => {
+    fetchUserDetails();
+    const focusListener = navigation.addListener('focus', () => {
+      fetchUserDetails();
+    });
+
+    return () => {
+      navigation.removeListener('focus', focusListener);
+    };
+  }, [fetchUserDetails, navigation]);
 
   const seats = [
     "available",
@@ -102,7 +145,7 @@ const SeatSelection = ({ route }) => {
       </View>
 
       <View style={styles.SeatSelection}>
-        <Text style={styles.userName}>Ama Atta</Text>
+        <Text style={styles.userName}>{userDetails.fname} {userDetails.lname}</Text>
         <Text style={styles.seatStatus}>
           Seat: {selectedSeat || "Not selected"}
         </Text>

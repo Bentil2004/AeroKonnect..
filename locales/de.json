@@ -40,6 +40,8 @@
     "Surname": "Nachname",
     "Cancel": "Abbrechen",
     "Language": "Sprache",
+    "Flight Delay": "Flugverspätung",
+    "Your flight {{flightNumber}} scheduled for {{departureTime}} has been delayed. New departure time is {{newDepartureTime}}.": "Ihr Flug {{flightNumber}}, geplant für {{departureTime}}, hat sich verspätet. Neue Abflugzeit ist {{newDepartureTime}}.",
     
     "No trip available": "Keine Reise verfügbar",
     "Booking Reference": "Buchungsreferenz",
@@ -47,6 +49,10 @@
     "Not Ticketed": "Nicht ticketiert",
     "AI Assistant": "KI-Assistent",
     "Send a message": "Nachricht senden",
+    "Home": "Startseite",
+    "Explore": "Erkunden",
+    "My Trip": "Meine Reise",
+    "Profile": "Profil",
     
     "AIChatScreen": {
         "WelcomeMessage": "Willkommen im KI-Chat!",

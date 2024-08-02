@@ -11,15 +11,15 @@ import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import { createClient } from "@supabase/supabase-js";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const supabaseUrl = "https://ucusngylouypldsoltnd.supabase.co";
 const supabaseAnonKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdXNuZ3lsb3V5cGxkc29sdG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcyNjgxMDksImV4cCI6MjAzMjg0NDEwOX0.cQlMeHLv1Dd6gksfz0lO6Sd3asYfgXZrkRuCxIMnwqw";
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
-  
-  const { height } = Dimensions.get("window");
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-  
+const { height } = Dimensions.get("window");
+
 const LogInScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,7 +36,9 @@ const LogInScreen = () => {
       if (error) {
         Alert.alert(error.message);
       } else {
-        console.log('login successful',data.user.id)
+        console.log("login successful", data.user.id);
+        await AsyncStorage.setItem("userId", data.user.id);
+
         navigation.navigate("BottomTab");
       }
     }

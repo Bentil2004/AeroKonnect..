@@ -1,7 +1,10 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
 import React from 'react';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const Notification = () => {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       <View style={styles.notification}>
@@ -9,8 +12,14 @@ const Notification = () => {
           source={require('../../assets/AeroKonnect22.png')} 
           style={styles.logo}
         />
-        <Text style={styles.title}>Flight Delay</Text>
-        <Text style={styles.message}>Your flight AA1234 scheduled for 10:00 AM has been delayed. New departure time is 12:00 PM.</Text>
+        <Text style={styles.title}>{t('Flight Delay')}</Text>
+        <Text style={styles.message}>
+          {t('Your flight {{flightNumber}} scheduled for {{departureTime}} has been delayed. New departure time is {{newDepartureTime}}.', {
+            flightNumber: 'AA1234',
+            departureTime: '10:00 AM',
+            newDepartureTime: '12:00 PM',
+          })}
+        </Text>
       </View>
     </View>
   );

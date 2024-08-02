@@ -24,40 +24,37 @@
     "Experience the world through new cultures and breathtaking landscapes.": "Découvrez le monde à travers de nouvelles cultures et des paysages à couper le souffle.",
     "Recreational Sites Around the World": "Sites récréatifs autour du monde",
     "No Image Available": "Image non disponible",
-
     "The World Awaits": "Le Monde Vous Attend",
-        "Uncover Your Next Escape": "Découvrez Votre Prochaine Évasion",
-        "Explore Destinations": "Explorez les Destinations",
-        "Tap to Explore": "Touchez pour Explorer",
-        "Embark on a journey beyond the ordinary. Every corner of the world holds a story, a mystery, and a beauty waiting to be discovered. Whether you're chasing sunsets on remote beaches, exploring vibrant cities, or immersing yourself in new cultures, let AeroKonnect be your gateway to unforgettable adventures. The world is vast, and your next escape is just a tap away.": "Embarquez pour un voyage au-delà de l'ordinaire. Chaque coin du monde recèle une histoire, un mystère et une beauté qui attendent d'être découverts. Que vous poursuiviez des couchers de soleil sur des plages éloignées, exploriez des villes vibrantes ou vous plongiez dans de nouvelles cultures, laissez AeroKonnect être votre passerelle vers des aventures inoubliables. Le monde est vaste et votre prochaine évasion n'est qu'à un toucher.",
-            "MY TRIP": "MON VOYAGE",
-            "Past": "Passé",
-            "Upcoming": "À venir",
-            "Book Now": "Réservez maintenant",
-            "Add a trip": "Ajouter un voyage",
-            "Add a reservation code": "Ajouter un code de réservation",
-            "Booking code": "Code de réservation",
-            "Surname": "Nom de famille",
-            "Cancel": "Annuler",
-            "Language": "Langue",
-            
-                "No trip available": "Aucun voyage disponible",
-                "Booking Reference": "Référence de réservation",
-                "Ticketed": "Billet émis",
-                "Not Ticketed": "Sans billet",
-                "AI Assistant": "Assistant IA",
-                "Send a message": "Envoyer un message",
-      
-                
-                    "AIChatScreen": {
-                      "WelcomeMessage": "Bienvenue dans le chat IA !",
-                      "Prompt": "Demandez-moi n'importe quoi",
-                      "SendButton": "Envoyer",
-                      "NoResponse": "Pas de réponse de l'IA"
-                    }
-                  
-          
-          
-      
+    "Uncover Your Next Escape": "Découvrez Votre Prochaine Évasion",
+    "Explore Destinations": "Explorez les Destinations",
+    "Tap to Explore": "Touchez pour Explorer",
+    "MY TRIP": "MON VOYAGE",
+    "Past": "Passé",
+    "Upcoming": "À venir",
+    "Book Now": "Réservez maintenant",
+    "Add a trip": "Ajouter un voyage",
+    "Add a reservation code": "Ajouter un code de réservation",
+    "Booking code": "Code de réservation",
+    "Surname": "Nom de famille",
+    "Cancel": "Annuler",
+    "Language": "Langue",
+    "No trip available": "Aucun voyage disponible",
+    "Booking Reference": "Référence de réservation",
+    "Ticketed": "Billet émis",
+    "Not Ticketed": "Sans billet",
+    "AI Assistant": "Assistant IA",
+    "Send a message": "Envoyer un message",
+    "Home": "Accueil",
+    "Explore": "Explorer",
+    "My Trip": "Mon Voyage",
+    "Profile": "Profil",
+    "Flight Delay": "Retard de vol",
+    "Your flight {{flightNumber}} scheduled for {{departureTime}} has been delayed. New departure time is {{newDepartureTime}}.": "Votre vol {{flightNumber}} prévu pour {{departureTime}} a été retardé. Le nouvel horaire de départ est {{newDepartureTime}}.",
+    "AIChatScreen": {
+      "WelcomeMessage": "Bienvenue dans le chat IA !",
+      "Prompt": "Demandez-moi n'importe quoi",
+      "SendButton": "Envoyer",
+      "NoResponse": "Pas de réponse de l'IA"
+    }
   }
   
