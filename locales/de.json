@@ -53,6 +53,51 @@
     "Explore": "Erkunden",
     "My Trip": "Meine Reise",
     "Profile": "Profil",
+
+    
+        "Your feedback is important to us! Help us improve your experience by sharing your thoughts and suggestions.": "Ihr Feedback ist uns wichtig! Helfen Sie uns, Ihre Erfahrung zu verbessern, indem Sie Ihre Gedanken und Vorschläge teilen.",
+        "Rate our app": "Bewerten Sie unsere App",
+        "What aspect of our service would you like to give feedback on? (Select one)": "Zu welchem Aspekt unseres Service möchten Sie Feedback geben? (Wählen Sie eine aus)",
+        "Your Comment:": "Ihr Kommentar:",
+        "Please tell us more about your experience": "Bitte erzählen Sie uns mehr über Ihre Erfahrung",
+        "Contact Information (Optional)": "Kontaktinformationen (Optional)",
+        "If you would like us to follow up with you, please leave your email address": "Wenn Sie möchten, dass wir Sie kontaktieren, hinterlassen Sie bitte Ihre E-Mail-Adresse",
+        "Submit Feedback": "Feedback senden",
+        "Your feedback is anonymous and will be used solely to improve our services.": "Ihr Feedback ist anonym und wird ausschließlich zur Verbesserung unserer Dienstleistungen verwendet.",
+        "Change to English": "Ändern zu Englisch",
+        "Change to Spanish": "Ändern zu Spanisch",
+        "Change to French": "Ändern zu Französisch",
+        "Change to Arabic": "Ändern zu Arabisch",
+        "Change to German": "Ändern zu Deutsch",
+    
+            "Personal Information": "Persönliche Informationen",
+            "Profile Details": "Profil Details",
+            "Manage Account": "Konto verwalten",
+            "Privacy Policy": "Datenschutzrichtlinie",
+            "Terms and Conditions": "Allgemeine Geschäftsbedingungen",
+                "First Name": "Vorname",
+                "Last Name": "Nachname",
+                "Email": "E-Mail",
+                "Phone Number": "Telefonnummer",
+                "Amount": "Betrag",
+                "Mobile Money": "Mobilgeld",
+                "Use MTN, Telecel, AT cash": "Verwenden Sie MTN, Telecel, AT cash",
+                "Credit or Debit Card": "Kredit- oder Debitkarte",
+                "Use your Bank debit or Credit card": "Verwenden Sie Ihre Bankkarte",
+                "Mobile Money Number": "Mobilgeldnummer",
+                "Document Number": "Dokumentnummer",
+                "Issuing Country": "Herausgeberland",
+                "Expire Date": "Ablaufdatum",
+                "Nationality": "Nationalität",
+                "Remember these profile details for the next bookings": "Speichern Sie diese Profildaten für zukünftige Buchungen",
+                "Confirm and Pay": "Bestätigen und Bezahlen",
+                "Fill in all fields": "Füllen Sie alle Felder aus",
+                "Transaction Cancelled!!": "Transaktion abgebrochen!!",
+                "Transaction Approved!!": "Transaktion genehmigt!!",
+              
+
+          
+      
     
     "AIChatScreen": {
         "WelcomeMessage": "Willkommen im KI-Chat!",

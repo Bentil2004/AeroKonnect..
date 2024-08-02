@@ -1,154 +1,3 @@
-// import React from 'react';
-// import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, SafeAreaView, Image } from 'react-native';
-// import { Paystack } from "react-native-paystack-webview";
-
-// const PaymentMethodsScreen = () => {
-//   return (
-//     <SafeAreaView>
-//       <ScrollView contentContainerStyle={styles.container}>
-//         <Text style={styles.title}>Payment Methods</Text>
-//         <Text style={styles.subtitle}>
-//           Secure and Easy Payment: Complete your booking quickly and safely using your preferred payment method.
-//         </Text>
-
-//         <Text style={styles.sectionTitle}>Choose your payment method:</Text>
-//         <View style={styles.paymentMethods}>
-//           <Image source={require('../../assets/images/visa.png')} style={styles.paymentIcon} />
-//           <Image source={require('../../assets/images/mastercard.png')} style={styles.paymentIcon} />
-//           <Image source={require('../../assets/images/paypal.png')} style={styles.paymentIcon} />
-//           <Image source={require('../../assets/images/my_mtn.png')} style={styles.paymentIcon} />
-//           <Image source={require('../../assets/images/vodafone.png')} style={styles.paymentIcon} />
-//           <Image source={require('../../assets/images/bank.png')} style={styles.paymentIcon} />
-//         </View>
-
-//         <Text style={styles.sectionTitle}>Enter your card details</Text>
-//         <TextInput style={styles.input} placeholder="Name on Card" />
-//         <TextInput style={styles.input} placeholder="Card Number" keyboardType="numeric" />
-//         <View style={styles.row}>
-//           <TextInput style={[styles.input, styles.halfInput]} placeholder="MM/YY" keyboardType="numeric" />
-//           <TextInput style={[styles.input, styles.halfInput]} placeholder="CVV" keyboardType="numeric" />
-//         </View>
-//         <TextInput style={styles.input} placeholder="Zip Code" keyboardType="numeric" />
-//         <TextInput style={styles.input} placeholder="Country" />
-//         <TextInput style={styles.input} placeholder="City" />
-//         <TextInput style={styles.input} placeholder="Address" />
-
-//         <View style={styles.row}>
-//           <TouchableOpacity style={styles.checkboxContainer}>
-//             <Image source={require('../../assets/images/checkbox_unchecked.png')} style={styles.checkboxIcon} />
-//             <Text style={styles.checkboxText}>Save this card for future bookings</Text>
-//           </TouchableOpacity>
-//         </View>
-
-//         <TouchableOpacity style={styles.submitButton}>
-//           <Text style={styles.submitButtonText}>Submit Payment</Text>
-//         </TouchableOpacity>
-
-//         <Text style={styles.footerText}>
-//           Your payment information is encrypted and securely processed
-//         </Text>
-
-//         <Text style={styles.successMessage}>
-//           Your card has been successfully added
-//         </Text>
-
-//       </ScrollView>
-//     </SafeAreaView>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flexGrow: 1,
-//     padding: 16,
-//     backgroundColor: '#ffff',
-//   },
-//   title: {
-//     fontSize: 24,
-//     justifyContent: 'center',
-//     marginBottom: 8,
-//   },
-//   subtitle: {
-//     fontSize: 16,
-//     color: '#6c757d',
-//     marginBottom: 16,
-//   },
-//   sectionTitle: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     marginTop: 16,
-//     marginBottom: 8,
-//   },
-//   paymentMethods: {
-//     flexDirection: 'row',
-//     flexWrap: 'wrap',
-//     justifyContent: 'space-around',
-//     marginBottom: 16,
-//   },
-//   paymentIcon: {
-//     width: 50,
-//     height: 50,
-//     margin: 8,
-//   },
-//   input: {
-//     height: 40,
-//     borderColor: '#ced4da',
-//     borderWidth: 1,
-//     borderRadius: 5,
-//     paddingHorizontal: 8,
-//     marginBottom: 12,
-//   },
-//   row: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//   },
-//   halfInput: {
-//     width: '48%',
-//   },
-//   checkboxContainer: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     marginBottom: 16,
-//   },
-//   checkboxIcon: {
-//     width: 20,
-//     height: 20,
-//   },
-//   checkboxText: {
-//     marginLeft: 8,
-//     color: '#00527e',
-//   },
-//   submitButton: {
-//     backgroundColor: '#00527e',
-//     paddingVertical: 12,
-//     paddingHorizontal: 16,
-//     borderRadius: 5,
-//     alignItems: 'center',
-//     marginBottom: 16,
-//   },
-//   submitButtonText: {
-//     color: '#fff',
-//     fontSize: 16,
-//   },
-//   footerText: {
-//     fontSize: 12,
-//     color: '#6c757d',
-//     textAlign: 'center',
-//     marginBottom: 16,
-//   },
-//   successMessage: {
-//     fontSize: 16,
-//     color: 'green',
-//     textAlign: 'center',
-//     marginBottom: 16,
-//   },
-// });
-
-// export default PaymentMethodsScreen;
-
-
-
-
 import React, { useState } from "react";
 import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-root-toast";
@@ -165,8 +14,11 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import { Paystack } from "react-native-paystack-webview";
+import { useTranslation } from 'react-i18next';
 
 export default function PaymentMethodsScreen() {
+  const { t } = useTranslation();
+  
   const [pay, setPay] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
   const [isSelected, setIsSelected] = useState(false);
@@ -198,7 +50,7 @@ export default function PaymentMethodsScreen() {
     ) {
       setPay(true);
     } else {
-      Toast.show("Fill in all fields", {
+      Toast.show(t("Fill in all fields"), {
         duration: Toast.durations.LONG,
       });
     }
@@ -216,41 +68,38 @@ export default function PaymentMethodsScreen() {
       <RootSiblingParent>
         <ScrollView>
           <View style={styles.appBar}>
-            <Text style={styles.appBarTitle}>Payment Method</Text>
+            <Text style={styles.appBarTitle}>{t('Payment Method')}</Text>
           </View>
           <View style={styles.body}>
             <Text style={styles.location}>KUM-ACC</Text>
             <Text style={styles.date}>29th June 2024</Text>
-            {/* <Text style={styles.price}>Ghs700</Text> */}
-            {/* <View style={styles.line} /> */}
-            {/* <Text style={styles.label}>Payment Method</Text> */}
             <TextInput
               style={styles.input}
-              placeholder="First Name"
+              placeholder={t('First Name')}
               onChangeText={(text) => handleOnchange(text, "billingFirstname")}
               value={billingDetail?.billingFirstname}
             />
             <TextInput
               style={styles.input}
-              placeholder="Last Name"
+              placeholder={t('Last Name')}
               onChangeText={(text) => handleOnchange(text, "billingLastname")}
               value={billingDetail?.billingLastname}
             />
             <TextInput
               style={styles.input}
-              placeholder="amadoe@gmail.com"
+              placeholder={t('Email')}
               onChangeText={(text) => handleOnchange(text, "billingEmail")}
               value={billingDetail?.billingEmail}
             />
             <TextInput
               style={styles.input}
-              placeholder="phone number"
+              placeholder={t('Phone Number')}
               onChangeText={(text) => handleOnchange(text, "billingMobile")}
               value={billingDetail?.billingMobile}
             />
             <TextInput
               style={styles.input}
-              placeholder="enter amount"
+              placeholder={t('Amount')}
               onChangeText={(text) => handleOnchange(text, "amount")}
               value={billingDetail?.amount}
             />
@@ -270,10 +119,10 @@ export default function PaymentMethodsScreen() {
                       size={20}
                       color="black"
                     />
-                    <Text>Mobile Money</Text>
+                    <Text>{t('Mobile Money')}</Text>
                   </View>
                   <Text style={styles.radioHint}>
-                    Use Mtn, Telecel, AT cash
+                    {t('Use MTN, Telecel, AT cash')}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -292,10 +141,10 @@ export default function PaymentMethodsScreen() {
                       size={20}
                       color="black"
                     />
-                    <Text>Credit or Debit card</Text>
+                    <Text>{t('Credit or Debit Card')}</Text>
                   </View>
                   <Text style={styles.radioHint}>
-                    Use your Bank debit or Credit card
+                    {t('Use your Bank debit or Credit card')}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -303,7 +152,7 @@ export default function PaymentMethodsScreen() {
             {selectedPaymentMethod === "mobile_money" && (
               <TextInput
                 style={styles.input}
-                placeholder="Mobile Money Number"
+                placeholder={t('Mobile Money Number')}
                 onChangeText={(text) =>
                   handleOnchange(text, "mobileMoneyNumber")
                 }
@@ -312,25 +161,25 @@ export default function PaymentMethodsScreen() {
             )}
             <TextInput
               style={styles.input}
-              placeholder="Document Number"
+              placeholder={t('Document Number')}
               onChangeText={(text) => handleOnchange(text, "documentNumber")}
               value={billingDetail?.documentNumber}
             />
             <TextInput
               style={styles.input}
-              placeholder="Issuing Country"
+              placeholder={t('Issuing Country')}
               onChangeText={(text) => handleOnchange(text, "issuingCountry")}
               value={billingDetail?.issuingCountry}
             />
             <TextInput
               style={styles.input}
-              placeholder="Expire Date"
+              placeholder={t('Expire Date')}
               onChangeText={(text) => handleOnchange(text, "expireDate")}
               value={billingDetail?.expireDate}
             />
             <TextInput
               style={styles.input}
-              placeholder="Nationality"
+              placeholder={t('Nationality')}
               onChangeText={(text) => handleOnchange(text, "nationality")}
               value={billingDetail?.nationality}
             />
@@ -344,13 +193,13 @@ export default function PaymentMethodsScreen() {
                 )}
               </TouchableOpacity>
               <Text style={styles.checkboxText}>
-                Remember these profile details for the next bookings
+                {t('Remember these profile details for the next bookings')}
               </Text>
             </View>
             <Button
-              title="Confirm and Pay"
+              title={t('Confirm and Pay')}
               color="#00527e"
-              accessibilityLabel="confirm and pay"
+              accessibilityLabel={t('confirm and pay')}
               onPress={handleSubmit}
             />
             {pay && (
@@ -363,7 +212,7 @@ export default function PaymentMethodsScreen() {
                   billingMobile={billingDetail.billingMobile}
                   activityIndicatorColor="green"
                   onCancel={(e) => {
-                    Toast.show("Transaction Cancelled!!", {
+                    Toast.show(t("Transaction Cancelled!!"), {
                       duration: Toast.durations.LONG,
                     });
                   }}
@@ -371,7 +220,7 @@ export default function PaymentMethodsScreen() {
                     const responseObject =
                       response["transactionRef"]["message"];
                     if (responseObject === "Approved") {
-                      Toast.show("Transaction Approved!!", {
+                      Toast.show(t("Transaction Approved!!"), {
                         duration: Toast.durations.LONG,
                       });
                     }
@@ -391,13 +240,11 @@ export default function PaymentMethodsScreen() {
     </KeyboardAvoidingView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-  scrollViewContent: {
-    padding: 20,
   },
   appBar: {
     backgroundColor: "#fff",
@@ -452,7 +299,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderColor: "#ccc",
-    borderRadius:18,
+    borderRadius: 18,
     borderWidth: 1,
     padding: 10,
     marginVertical: 5,

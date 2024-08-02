@@ -1,23 +1,24 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
-
+import { useTranslation } from 'react-i18next';
 
 const LegalInfo = ({ navigation }) => {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.backButton} onPress={() => navigation.navigate('Profile')}>←</Text>
-        <Text style={styles.headerText}>Legal Information</Text>
+        <Text style={styles.backButton} onPress={() => navigation.goBack()}>←</Text>
+        <Text style={styles.headerText}>{t('Legal Information')}</Text>
       </View>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('PrivacyPolicy')}>
-        <Text style={styles.buttonText}>Privacy Policy</Text>
+        <Text style={styles.buttonText}>{t('Privacy Policy')}</Text>
         <Text style={styles.arrow}>→</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('TermsAndConditions')}>
-        <Text style={styles.buttonText}>Terms and Condition</Text>
+        <Text style={styles.buttonText}>{t('Terms and Conditions')}</Text>
         <Text style={styles.arrow}>→</Text>
       </TouchableOpacity>
-      
     </View>
   );
 };
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     zIndex: 1000,
-    padding: -10,   
+    paddingTop: 20, // Adjusted for better positioning
   },
   backButton: {
     position: 'absolute',
@@ -46,10 +47,8 @@ const styles = StyleSheet.create({
   headerText: {
     color: 'white',
     fontSize: 25,
-    marginLeft: 10,
-    marginTop: 20,
     fontWeight: 'bold',
-    marginRight: 10,
+    marginHorizontal: 10,
   },
   button: {
     flexDirection: 'row',
@@ -61,7 +60,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginTop: 25,
     borderRadius: 5,
-    top: 40,
   },
   buttonText: {
     fontSize: 16,
@@ -69,12 +67,6 @@ const styles = StyleSheet.create({
   },
   arrow: {
     fontSize: 16,
-  },
-  appVersion: {
-    position: 'absolute',
-    bottom: 20,
-    alignSelf: 'center',
-    color: '#005f80',
   },
 });
 
